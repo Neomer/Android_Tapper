@@ -1,7 +1,9 @@
 package my.neomer.tapper;
 
-public interface IActor {
+import android.graphics.Canvas;
 
-    void Draw();
+public interface IActor extends IPhysicsObject {
+
+    void Draw(Canvas canvas);
 
 }
