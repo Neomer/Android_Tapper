@@ -1,6 +1,8 @@
 package my.neomer.tapper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaCodec;
@@ -27,6 +29,8 @@ public class Renderer extends SurfaceView
     WorldUpdater mWorldUpdater;
     Lock mActorsLocker;
 
+    GravityForce mGravity;
+
     public Renderer(Context context)
     {
         super(context);
@@ -34,6 +38,15 @@ public class Renderer extends SurfaceView
         mActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
 
+        // Load global forces
+        mGravity = new GravityForce();
+
+        // Creating a main player
+        Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.player_sprite);
+        IActor player = new PlayerActor(sprite, new Vector(50, 50));
+        SpawnActor(player);
+
+        // Creating world updater
         mWorldUpdater = new WorldUpdater(this);
         mWorldUpdater.setDaemon(true);
         mWorldUpdater.begin();

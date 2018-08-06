@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setupWindowSettings();
 
         renderer = new Renderer(this);
+
         setContentView(renderer);
     }
 
