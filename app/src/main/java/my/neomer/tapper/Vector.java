@@ -44,6 +44,19 @@ public class Vector {
     public void Add(Vector vector) {
         x += vector.x;
         y += vector.y;
+
+        updateLength();
+    }
+
+    public  void Multiply(double value) {
+        x *= value;
+        y *= value;
+
+        updateLength();
+    }
+
+    public String toString() {
+        return String.format("(%f;%f)", x, y);
     }
 
 }

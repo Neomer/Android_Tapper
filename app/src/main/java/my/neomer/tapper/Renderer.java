@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.media.MediaCodec;
+import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -25,15 +27,19 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Renderer extends SurfaceView
 {
 
-    List<IActor> mActors;
-    WorldUpdater mWorldUpdater;
-    Lock mActorsLocker;
+    private List<IActor> mActors;
+    private WorldUpdater mWorldUpdater;
+    private Lock mActorsLocker;
 
-    GravityForce mGravity;
+    private GravityForce mGravity;
+
+    private boolean mDisplayFPS;
 
     public Renderer(Context context)
     {
         super(context);
+
+        mDisplayFPS = true;
 
         mActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
@@ -42,9 +48,12 @@ public class Renderer extends SurfaceView
         mGravity = new GravityForce();
 
         // Creating a main player
-        Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.player_sprite);
+        Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.projectile);
         IActor player = new PlayerActor(new Coordinate(50, 50), sprite);
-        SpawnActor(player);
+        //SpawnActor(player);
+
+        player.ApplyImpulse(new Vector(10, 0));
+        player.ApplyForce(mGravity);
 
         // Creating world updater
         mWorldUpdater = new WorldUpdater(this);
@@ -77,16 +86,29 @@ public class Renderer extends SurfaceView
         return result;
     }
 
+    public void setDisplayFPS(boolean mDisplayFPS) {
+        this.mDisplayFPS = mDisplayFPS;
+    }
+
+    public boolean getDisplayFPS() {
+        return mDisplayFPS;
+    }
+
+
     private class WorldUpdater extends Thread
     {
 
         private Renderer mRenderer;
         private volatile boolean mRun = false;
 
+        private Paint mTextPaint;
 
-        WorldUpdater(Renderer renderer)
-        {
+
+        WorldUpdater(Renderer renderer) {
             mRenderer = renderer;
+            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mTextPaint.setTextSize(25);
+            mTextPaint.setARGB(255, 255,0,0);
         }
 
         public void begin()
@@ -101,7 +123,7 @@ public class Renderer extends SurfaceView
             while (mRun)
             {
                 long now = System.currentTimeMillis();
-                long elapsed = now - start;
+                double elapsed = (now - start) * 0.001;
                 start = now;
 
                 Canvas canvas = null;
@@ -112,6 +134,12 @@ public class Renderer extends SurfaceView
                     synchronized (mRenderer.getHolder())
                     {
                         drawSurface(canvas);
+
+                        if (mRenderer.getDisplayFPS())
+                        {
+                            int y = canvas.getHeight() - 20;
+                            canvas.drawText(String.format("FPS: %d", Math.round(1 / elapsed)), 10, y, mTextPaint);
+                        }
 
                         for (IActor actor : mActors)
                         {

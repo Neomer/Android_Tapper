@@ -29,4 +29,9 @@ public class Coordinate
     public void setY(double y) {
         this.y = y;
     }
+
+    public void Add(Vector vector) {
+        x += vector.getX();
+        y += vector.getY();
+    }
 }
