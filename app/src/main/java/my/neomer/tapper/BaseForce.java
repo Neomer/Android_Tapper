@@ -30,4 +30,11 @@ class BaseForce implements IForce
     {
         return mAmplitude;
     }
+
+    @Override
+    public IForce add(IForce force)
+    {
+
+        return null;
+    }
 }

@@ -5,7 +5,8 @@ import android.renderscript.Matrix2f;
 public interface IForce {
 
     Vector getVector();
-
     float getAmplitude();
+    IForce add(IForce force);
+
 
 }

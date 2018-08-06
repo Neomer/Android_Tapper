@@ -19,6 +19,7 @@ abstract class BaseActor implements IActor {
 
     private List<IForce> mForces;
 
+
     BaseActor(Vector position, Bitmap sprite)
     {
         mBitmap = sprite;
@@ -27,7 +28,6 @@ abstract class BaseActor implements IActor {
         mVelocity = new BaseForce();
         mForces = new ArrayList<IForce>();
     }
-
 
     @Override
     public void Draw(Canvas canvas)
@@ -42,8 +42,23 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
+    public void ApplyImpulse(IForce impulse)
+    {
+
+    }
+
+    @Override
     public void UpdatePhysics(long timespan)
     {
-        
+        updateVelocity(timespan);
+    }
+
+    private void updateVelocity(long timespan)
+    {
+        // Calculate result force
+        for (IForce force : mForces)
+        {
+
+        }
     }
 }
