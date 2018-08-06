@@ -48,11 +48,15 @@ public class Vector {
         updateLength();
     }
 
-    public  void Multiply(double value) {
+    public void Multiply(double value) {
         x *= value;
         y *= value;
 
         updateLength();
+    }
+
+    public void Reflects(Vector normal) {
+        
     }
 
     public String toString() {
