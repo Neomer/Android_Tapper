@@ -18,7 +18,6 @@ class BaseForce implements IForce
         mAmplitude = amplitude;
     }
 
-
     @Override
     public Vector getVector()
     {

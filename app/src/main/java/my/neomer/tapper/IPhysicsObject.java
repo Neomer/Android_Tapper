@@ -2,8 +2,8 @@ package my.neomer.tapper;
 
 public interface IPhysicsObject {
 
-    void ApplyForce(IForce force);
-    void ApplyImpulse(IForce impulse);
+    void ApplyForce(Vector force);
+    void ApplyImpulse(Vector impulse);
 
     void UpdatePhysics(long timespan);
 

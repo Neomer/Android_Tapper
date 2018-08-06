@@ -41,4 +41,9 @@ public class Vector {
         mLength = Math.sqrt(x * x + y * y);
     }
 
+    public void Add(Vector vector) {
+        x += vector.x;
+        y += vector.y;
+    }
+
 }

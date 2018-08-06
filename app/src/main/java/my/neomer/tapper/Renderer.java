@@ -43,7 +43,7 @@ public class Renderer extends SurfaceView
 
         // Creating a main player
         Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.player_sprite);
-        IActor player = new PlayerActor(sprite, new Vector(50, 50));
+        IActor player = new PlayerActor(new Coordinate(50, 50), sprite);
         SpawnActor(player);
 
         // Creating world updater

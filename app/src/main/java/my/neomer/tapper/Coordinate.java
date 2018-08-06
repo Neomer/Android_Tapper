@@ -2,21 +2,31 @@ package my.neomer.tapper;
 
 public class Coordinate
 {
-    private float x, y;
+    private double x, y;
 
-    public float getX() {
+    Coordinate() {
+        x = 0; y = 0;
+    }
+
+    Coordinate(double x, double y) {
+        this.x  = x;
+        this.y = y;
+    }
+
+
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 }

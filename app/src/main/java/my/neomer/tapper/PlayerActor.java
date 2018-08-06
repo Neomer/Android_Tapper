@@ -7,12 +7,11 @@ import android.graphics.Canvas;
 class PlayerActor extends BaseActor implements IControllable
 {
 
-    PlayerActor(Bitmap sprite, Vector position) {
+    PlayerActor(Coordinate position, Bitmap sprite) {
         super(position, sprite);
     }
 
     @Override
     public void Jump() {
-        ApplyForce(new BaseForce());
     }
 }

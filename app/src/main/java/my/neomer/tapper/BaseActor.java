@@ -13,36 +13,36 @@ import java.util.ListIterator;
 
 abstract class BaseActor implements IActor {
 
-    private Vector mPosition;
-    private BaseForce mVelocity;
+    private Coordinate mPosition;
+    private Vector mVelocity;
     private Bitmap mBitmap;
 
-    private List<IForce> mForces;
+    private List<Vector> mForces;
 
 
-    BaseActor(Vector position, Bitmap sprite)
+    BaseActor(Coordinate position, Bitmap sprite)
     {
         mBitmap = sprite;
         mPosition = position;
 
-        mVelocity = new BaseForce();
-        mForces = new ArrayList<IForce>();
+        mVelocity = new Vector();
+        mForces = new ArrayList<Vector>();
     }
 
     @Override
     public void Draw(Canvas canvas)
     {
-        canvas.drawBitmap(mBitmap, mPosition.getX(), mPosition.getY(), null);
+        canvas.drawBitmap(mBitmap, (int) mPosition.getX(),(int) mPosition.getY(), null);
     }
 
     @Override
-    public void ApplyForce(IForce force)
+    public void ApplyForce(Vector force)
     {
         mForces.add(force);
     }
 
     @Override
-    public void ApplyImpulse(IForce impulse)
+    public void ApplyImpulse(Vector impulse)
     {
 
     }
@@ -56,9 +56,9 @@ abstract class BaseActor implements IActor {
     private void updateVelocity(long timespan)
     {
         // Calculate result force
-        for (IForce force : mForces)
-        {
-
+        Vector resultForce = new Vector();
+        for (Vector v : mForces) {
+            resultForce.Add(v);
         }
     }
 }

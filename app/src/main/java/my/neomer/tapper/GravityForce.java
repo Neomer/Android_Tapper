@@ -1,10 +1,9 @@
 package my.neomer.tapper;
 
-public class GravityForce extends BaseForce {
+public class GravityForce extends Vector {
 
-    GravityForce()
-    {
-        super(new Vector(0, -1), 9.81f);
+    GravityForce() {
+        super(0, -9.81);
     }
 
 }
