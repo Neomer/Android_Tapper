@@ -2,31 +2,43 @@ package my.neomer.tapper;
 
 public class Vector {
 
-    private float x, y;
+    private double x, y;
+    private double mLength;
 
     Vector() {
         x = 0;
         y = 0;
+        mLength = 0;
     }
 
-    Vector(float x, float y) {
+    Vector(double x, double y) {
         this.x = x;
         this.y = y;
+        updateLength();
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
+
+    public double getLength() {
+        return mLength;
+    }
+
+    protected void updateLength() {
+        mLength = Math.sqrt(x * x + y * y);
+    }
+
 }
