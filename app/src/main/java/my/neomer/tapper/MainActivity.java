@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(renderer);
     }
 
+
+
     private void setupWindowSettings() {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

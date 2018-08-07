@@ -11,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 
 import java.net.FileNameMap;
@@ -38,6 +39,14 @@ public class Renderer extends SurfaceView
     private boolean mDisplayFPS;
 
     private IActor mPlayer;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        ((PlayerActor) Player()).Jump();
+
+        return true;
+    }
 
     public Renderer(Context context)
     {
@@ -210,7 +219,6 @@ public class Renderer extends SurfaceView
                     for (IActor actor : mActors)
                     {
                         actor.UpdatePhysics(elapsed);
-
                     }
                 }
                 catch (Exception e) { }

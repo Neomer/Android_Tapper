@@ -6,14 +6,22 @@ import android.graphics.Canvas;
 
 class PlayerActor extends BaseActor implements IControllable
 {
+    private ICollisionRegion mCollisionRegion;
 
     PlayerActor(Coordinate position, Bitmap sprite, Material material) {
         super(position, sprite, material);
+
+        mCollisionRegion = new RectangleCollisionRegion(sprite.getWidth(), sprite.getHeight());
     }
 
     @Override
     public boolean IsStatic() {
         return false;
+    }
+
+    @Override
+    public ICollisionRegion GetCollisionRegion() {
+        return mCollisionRegion;
     }
 
     @Override
