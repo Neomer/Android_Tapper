@@ -27,7 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Renderer extends SurfaceView
 {
-
+    private boolean bRun;
     private List<IActor> mActors;
     private WorldUpdater mWorldUpdater;
     private PhysicsUpdater mPhysicsUpdater;
@@ -43,6 +43,11 @@ public class Renderer extends SurfaceView
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!bRun)
+        {
+            bRun = true;
+            BeginPlay();
+        }
 
         ((PlayerActor) Player()).Jump();
 
@@ -53,6 +58,7 @@ public class Renderer extends SurfaceView
     {
         super(context);
 
+        bRun = false;
         mDisplayFPS = true;
 
         mActors = new ArrayList<IActor>();
@@ -75,16 +81,30 @@ public class Renderer extends SurfaceView
         mWorldUpdater = new WorldUpdater(this);
         mWorldUpdater.setDaemon(true);
         mWorldUpdater.begin();
-        mWorldUpdater.start();
 
         mPhysicsUpdater = new PhysicsUpdater(this);
         mPhysicsUpdater.setDaemon(true);
         mPhysicsUpdater.begin();
-        mPhysicsUpdater.start();
 
         mBlockSpwaner = new Spawner(this);
         mBlockSpwaner.setDaemon(true);
+    }
+
+    private void BeginPlay() {
+        mWorldUpdater.begin();
+        mWorldUpdater.start();
+
+        mPhysicsUpdater.begin();
+        mPhysicsUpdater.start();
+
+        mBlockSpwaner.begin();
         mBlockSpwaner.start();
+    }
+
+    private void StopPlay() {
+        mWorldUpdater.End();
+        mPhysicsUpdater.end();
+        mBlockSpwaner.end();
     }
 
     public IActor Player() {
@@ -109,6 +129,8 @@ public class Renderer extends SurfaceView
 
     public List<IActor> getActors()
     {
+        return mActors;
+        /*
         List<IActor> result = null;
         mActorsLocker.lock();
         try {
@@ -118,6 +140,7 @@ public class Renderer extends SurfaceView
             mActorsLocker.unlock();
         }
         return result;
+        */
     }
 
     public void setDisplayFPS(boolean mDisplayFPS) {
@@ -148,6 +171,11 @@ public class Renderer extends SurfaceView
         public void begin()
         {
             mRun = true;
+        }
+
+        public void End()
+        {
+            mRun = false;
         }
 
         @Override
@@ -213,6 +241,11 @@ public class Renderer extends SurfaceView
             mRun = true;
         }
 
+        public  void end()
+        {
+            mRun = false;
+        }
+
         @Override
         public void run()
         {
@@ -228,15 +261,17 @@ public class Renderer extends SurfaceView
                 {
                     for (IActor actor : mActors)
                     {
-                        if (!actor.IsDead())
+                        //if (!actor.IsDead())
                         {
                             actor.UpdatePhysics(elapsed);
+                            /*
                             if (actor.GetCoordinates().getY() <= 0 ||
                                     actor.GetCoordinates().getY() >= canvas.getHeight() ||
                                     actor.GetCoordinates().getX() <= 0)
                             {
-                                actor.Kill();
+                                //actor.Kill();
                             }
+                            */
                         }
                     }
                 }
@@ -251,14 +286,28 @@ public class Renderer extends SurfaceView
     private class Spawner extends Thread
     {
         Renderer mRenderer;
+        boolean mRun;
+
 
         Spawner(Renderer renderer) {
             mRenderer = renderer;
+            mRun = false;
         }
+
+        public void begin()
+        {
+            mRun = true;
+        }
+
+        public  void end()
+        {
+            mRun = false;
+        }
+
 
         @Override
         public void run() {
-            while (true)
+            while (mRun)
             {
                 Material defaultMaterial = new Material();
                 defaultMaterial.setElasticity(0);

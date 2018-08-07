@@ -58,8 +58,8 @@ abstract class BaseActor implements IActor {
     @Override
     public void Draw(Canvas canvas)
     {
-        canvas.drawText(String.format("Velocity: %s", mVelocity.toString()), 10, 20, fontPaint);
-        canvas.drawText(String.format("Position: %s", mPosition.toString()), 10, 40, fontPaint);
+        //canvas.drawText(String.format("Velocity: %s", mVelocity.toString()), 10, 20, fontPaint);
+        //canvas.drawText(String.format("Position: %s", mPosition.toString()), 10, 40, fontPaint);
         canvas.drawBitmap(mBitmap, (int) mPosition.getX(),(int) mPosition.getY(), null);
     }
 
@@ -76,15 +76,15 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
-    public void UpdatePhysics(double timespan) {
+    public void UpdatePhysics(double timeSpan) {
         if (IsStatic() || IsDead()) {
             return;
         }
 
-        updateVelocity(timespan);
+        updateVelocity(timeSpan);
 
         Vector v = mVelocity.Clone();
-        v.Multiply(timespan);
+        v.Multiply(timeSpan);
         mPosition.Add(v);
     }
 
@@ -93,14 +93,14 @@ abstract class BaseActor implements IActor {
         mMaterial = material;
     }
 
-    private void updateVelocity(double timespan)
+    private void updateVelocity(double timeSpan)
     {
         // Calculate result force
         Vector resultForce = new Vector();
         for (Vector v : mForces) {
             resultForce.Add(v);
         }
-        resultForce.Multiply(timespan);
+        resultForce.Multiply(timeSpan);
         mVelocity.Add(resultForce);
     }
 }
