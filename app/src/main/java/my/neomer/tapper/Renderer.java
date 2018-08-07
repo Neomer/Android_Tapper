@@ -37,6 +37,8 @@ public class Renderer extends SurfaceView
 
     private boolean mDisplayFPS;
 
+    private IActor mPlayer;
+
     public Renderer(Context context)
     {
         super(context);
@@ -55,10 +57,8 @@ public class Renderer extends SurfaceView
         Material defaultMaterial = new Material();
         defaultMaterial.setElasticity(0);
 
-        IActor player = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
-        SpawnActor(player);
-
-        player.ApplyImpulse(new Vector(10, -50));
+        mPlayer = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
+        SpawnActor(mPlayer);
 
         // Creating world updater
         mWorldUpdater = new WorldUpdater(this);
@@ -70,6 +70,10 @@ public class Renderer extends SurfaceView
         mPhysicsUpdater.setDaemon(true);
         mPhysicsUpdater.begin();
         mPhysicsUpdater.start();
+    }
+
+    public IActor Player() {
+        return mPlayer;
     }
 
     public void SpawnActor(IActor actor)
@@ -197,7 +201,7 @@ public class Renderer extends SurfaceView
             while (mRun)
             {
                 long now = System.currentTimeMillis();
-                double elapsed = (now - start) * 0.001;
+                double elapsed = (now - start) * 0.005;
                 start = now;
 
                 Canvas canvas = null;
@@ -206,6 +210,7 @@ public class Renderer extends SurfaceView
                     for (IActor actor : mActors)
                     {
                         actor.UpdatePhysics(elapsed);
+
                     }
                 }
                 catch (Exception e) { }

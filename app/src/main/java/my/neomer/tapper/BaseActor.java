@@ -66,7 +66,7 @@ abstract class BaseActor implements IActor {
         updateVelocity(timespan);
 
         Vector v = mVelocity.Clone();
-        v.Multiply(0.1);
+        v.Multiply(timespan);
         mPosition.Add(v);
     }
 

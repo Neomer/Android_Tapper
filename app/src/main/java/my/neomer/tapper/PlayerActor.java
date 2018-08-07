@@ -18,5 +18,6 @@ class PlayerActor extends BaseActor implements IControllable
 
     @Override
     public void Jump() {
+        ApplyImpulse(new Vector(0, -10));
     }
 }
