@@ -45,18 +45,22 @@ public class Vector {
         x += vector.x;
         y += vector.y;
 
-        updateLength();
+        //updateLength();
     }
 
     public void Multiply(double value) {
         x *= value;
         y *= value;
 
-        updateLength();
+        //updateLength();
     }
 
     public void Reflects(Vector normal) {
         
+    }
+
+    public Vector Clone() {
+        return new Vector(x, y);
     }
 
     public String toString() {

@@ -33,7 +33,6 @@ class BaseForce implements IForce
     @Override
     public IForce add(IForce force)
     {
-
         return null;
     }
 }

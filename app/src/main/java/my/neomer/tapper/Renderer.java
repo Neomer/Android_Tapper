@@ -29,6 +29,8 @@ public class Renderer extends SurfaceView
 
     private List<IActor> mActors;
     private WorldUpdater mWorldUpdater;
+    private PhysicsUpdater mPhysicsUpdater;
+
     private Lock mActorsLocker;
 
     private GravityForce mGravity;
@@ -49,17 +51,25 @@ public class Renderer extends SurfaceView
 
         // Creating a main player
         Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.projectile);
-        IActor player = new PlayerActor(new Coordinate(50, 50), sprite);
-        //SpawnActor(player);
 
-        player.ApplyImpulse(new Vector(10, 0));
-        player.ApplyForce(mGravity);
+        Material defaultMaterial = new Material();
+        defaultMaterial.setElasticity(0);
+
+        IActor player = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
+        SpawnActor(player);
+
+        player.ApplyImpulse(new Vector(10, -50));
 
         // Creating world updater
         mWorldUpdater = new WorldUpdater(this);
         mWorldUpdater.setDaemon(true);
         mWorldUpdater.begin();
         mWorldUpdater.start();
+
+        mPhysicsUpdater = new PhysicsUpdater(this);
+        mPhysicsUpdater.setDaemon(true);
+        mPhysicsUpdater.begin();
+        mPhysicsUpdater.start();
     }
 
     public void SpawnActor(IActor actor)
@@ -67,6 +77,7 @@ public class Renderer extends SurfaceView
         mActorsLocker.lock();
         try {
             mActors.add(actor);
+            actor.ApplyForce(mGravity);
         }
         finally {
             mActorsLocker.unlock();
@@ -123,7 +134,7 @@ public class Renderer extends SurfaceView
             while (mRun)
             {
                 long now = System.currentTimeMillis();
-                double elapsed = (now - start) * 0.001;
+                double elapsed = now - start;
                 start = now;
 
                 Canvas canvas = null;
@@ -133,17 +144,16 @@ public class Renderer extends SurfaceView
                     canvas = mRenderer.getHolder().lockCanvas();
                     synchronized (mRenderer.getHolder())
                     {
-                        drawSurface(canvas);
+                        canvas.drawColor(Color.WHITE);
 
                         if (mRenderer.getDisplayFPS())
                         {
                             int y = canvas.getHeight() - 20;
-                            canvas.drawText(String.format("FPS: %d", Math.round(1 / elapsed)), 10, y, mTextPaint);
+                            canvas.drawText(String.format("FPS: %d", Math.round(1000 / elapsed)), 10, y, mTextPaint);
                         }
 
                         for (IActor actor : mActors)
                         {
-                            actor.UpdatePhysics(elapsed);
                             actor.Draw(canvas);
                         }
                     }
@@ -158,9 +168,51 @@ public class Renderer extends SurfaceView
                 }
             }
         }
+    }
 
-        private void drawSurface(Canvas canvas) {
-            canvas.drawColor(Color.WHITE);
+    private class PhysicsUpdater extends Thread
+    {
+        private Renderer mRenderer;
+        private volatile boolean mRun = false;
+
+        private Paint mTextPaint;
+
+
+        PhysicsUpdater(Renderer renderer) {
+            mRenderer = renderer;
+            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mTextPaint.setTextSize(25);
+            mTextPaint.setARGB(255, 255,0,0);
+        }
+
+        public void begin()
+        {
+            mRun = true;
+        }
+
+        @Override
+        public void run()
+        {
+            long start = System.currentTimeMillis();
+            while (mRun)
+            {
+                long now = System.currentTimeMillis();
+                double elapsed = (now - start) * 0.001;
+                start = now;
+
+                Canvas canvas = null;
+                try
+                {
+                    for (IActor actor : mActors)
+                    {
+                        actor.UpdatePhysics(elapsed);
+                    }
+                }
+                catch (Exception e) { }
+                finally
+                {
+                }
+            }
         }
     }
 

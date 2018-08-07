@@ -34,4 +34,8 @@ public class Coordinate
         x += vector.getX();
         y += vector.getY();
     }
+
+    public String toString() {
+        return String.format("(%f;%f)", x, y);
+    }
 }

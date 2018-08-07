@@ -19,18 +19,18 @@ abstract class BaseActor implements IActor {
     private Coordinate mPosition;
     private Vector mVelocity;
     private Bitmap mBitmap;
-
     private List<Vector> mForces;
+    private Paint fontPaint;
+    private Material mMaterial;
 
-    Paint fontPaint;
-
-    BaseActor(Coordinate position, Bitmap sprite)
+    BaseActor(Coordinate position, Bitmap sprite, Material material)
     {
         mBitmap = sprite;
         mPosition = position;
 
         mVelocity = new Vector();
         mForces = new ArrayList<Vector>();
+        mMaterial = material;
 
         fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fontPaint.setTextSize(25);
@@ -41,6 +41,7 @@ abstract class BaseActor implements IActor {
     public void Draw(Canvas canvas)
     {
         canvas.drawText(String.format("Velocity: %s", mVelocity.toString()), 10, 20, fontPaint);
+        canvas.drawText(String.format("Position: %s", mPosition.toString()), 10, 40, fontPaint);
         canvas.drawBitmap(mBitmap, (int) mPosition.getX(),(int) mPosition.getY(), null);
     }
 
@@ -58,10 +59,20 @@ abstract class BaseActor implements IActor {
 
     @Override
     public void UpdatePhysics(double timespan) {
+        if (IsStatic()) {
+            return;
+        }
+
         updateVelocity(timespan);
-        //Vector v = mVelocity;
-        //v.Multiply(timespan);
-        mPosition.Add(mVelocity);
+
+        Vector v = mVelocity.Clone();
+        v.Multiply(0.1);
+        mPosition.Add(v);
+    }
+
+    @Override
+    public void SetMaterial(Material material) {
+        mMaterial = material;
     }
 
     private void updateVelocity(double timespan)
