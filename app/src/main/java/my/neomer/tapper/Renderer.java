@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaCodec;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -200,12 +201,20 @@ public class Renderer extends SurfaceView
                         if (mRenderer.getDisplayFPS())
                         {
                             int y = canvas.getHeight() - 20;
-                            canvas.drawText(String.format("FPS: %d W: %d H: %d", Math.round(1000 / elapsed), canvas.getWidth(), canvas.getHeight()), 10, y, mTextPaint);
+                            Rect r = mRenderer.Player().GetCollisionRegion().GetMappedRect(mRenderer.Player().GetCoordinates());
+                            canvas.drawText(String.format("FPS: %d W: %d H: %d RECT: %s",
+                                    Math.round(1000 / elapsed),
+                                    canvas.getWidth(),
+                                    canvas.getHeight(),
+                                    r.toString()), 10, y, mTextPaint);
                         }
 
                         for (IActor actor : mActors)
                         {
-                            actor.Draw(canvas);
+                            if (!actor.IsDead())
+                            {
+                                actor.Draw(canvas);
+                            }
                         }
                     }
                 }
@@ -250,28 +259,33 @@ public class Renderer extends SurfaceView
         public void run()
         {
             long start = System.currentTimeMillis();
+            IActor player = mRenderer.Player();
+
             while (mRun)
             {
                 long now = System.currentTimeMillis();
                 double elapsed = (now - start) * 0.005;
                 start = now;
-
-                Canvas canvas = null;
                 try
                 {
                     for (IActor actor : mActors)
                     {
-                        //if (!actor.IsDead())
+                        if (!actor.IsDead())
                         {
                             actor.UpdatePhysics(elapsed);
-                            /*
-                            if (actor.GetCoordinates().getY() <= 0 ||
-                                    actor.GetCoordinates().getY() >= canvas.getHeight() ||
-                                    actor.GetCoordinates().getX() <= 0)
+
+                            Coordinate actorCoordinate = actor.GetCoordinates();
+                            if (actorCoordinate.getX() <= 0 ||
+                                    actorCoordinate.getY() <= 0 ||
+                                    actorCoordinate.getY() >= 900 ||
+                                    (actor != player && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion())))
                             {
-                                //actor.Kill();
+                                actor.Kill();
+                                if (actor == Player())
+                                {
+                                    mRenderer.StopPlay();
+                                }
                             }
-                            */
                         }
                     }
                 }
@@ -320,7 +334,7 @@ public class Renderer extends SurfaceView
                 mRenderer.SpawnActor(barrier);
 
                 try {
-                    sleep(5000);
+                    sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

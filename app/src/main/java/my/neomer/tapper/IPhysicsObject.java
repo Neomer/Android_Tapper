@@ -4,6 +4,8 @@ public interface IPhysicsObject {
 
     void SetMaterial(Material material);
 
+    Coordinate GetCoordinates();
+
     void ApplyForce(Vector force);
     void ApplyImpulse(Vector impulse);
 

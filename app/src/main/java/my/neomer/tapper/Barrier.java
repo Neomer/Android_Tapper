@@ -9,7 +9,7 @@ public class Barrier extends BaseActor {
     Barrier(Coordinate position, Bitmap sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(sprite.getWidth(), sprite.getHeight());
+        mCollisionRegion = new RectangleCollisionRegion(this, sprite.getWidth(), sprite.getHeight());
     }
 
     @Override

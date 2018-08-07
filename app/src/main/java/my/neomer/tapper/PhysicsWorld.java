@@ -42,4 +42,9 @@ public class PhysicsWorld implements IPhysicsObject
     public boolean IsDead() {
         return false;
     }
+
+    @Override
+    public Coordinate GetCoordinates() {
+        return null;
+    }
 }

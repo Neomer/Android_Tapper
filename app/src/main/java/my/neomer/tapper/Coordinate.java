@@ -38,4 +38,9 @@ public class Coordinate
     public String toString() {
         return String.format("(%f;%f)", x, y);
     }
+
+    public  Coordinate Clone() {
+        return new Coordinate(x, y);
+    }
+
 }
