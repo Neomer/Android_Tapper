@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 abstract class BaseActor implements IActor {
-
     private Coordinate mPosition;
     private Vector mVelocity;
     private Bitmap mBitmap;
     private List<Vector> mForces;
     private Paint fontPaint;
     private Material mMaterial;
+
+    private boolean mDead;
 
     BaseActor(Coordinate position, Bitmap sprite, Material material)
     {
@@ -35,6 +36,23 @@ abstract class BaseActor implements IActor {
         fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fontPaint.setTextSize(25);
         fontPaint.setARGB(255, 255, 0, 0);
+
+        mDead = false;
+    }
+
+    @Override
+    public Coordinate GetCoordinates() {
+        return mPosition;
+    }
+
+    @Override
+    public void Kill() {
+        mDead = true;
+    }
+
+    @Override
+    public boolean IsDead() {
+        return mDead;
     }
 
     @Override
@@ -59,7 +77,7 @@ abstract class BaseActor implements IActor {
 
     @Override
     public void UpdatePhysics(double timespan) {
-        if (IsStatic()) {
+        if (IsStatic() || IsDead()) {
             return;
         }
 

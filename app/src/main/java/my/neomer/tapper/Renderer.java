@@ -31,6 +31,7 @@ public class Renderer extends SurfaceView
     private List<IActor> mActors;
     private WorldUpdater mWorldUpdater;
     private PhysicsUpdater mPhysicsUpdater;
+    private Spawner mBlockSpwaner;
 
     private Lock mActorsLocker;
 
@@ -67,6 +68,7 @@ public class Renderer extends SurfaceView
         defaultMaterial.setElasticity(0);
 
         mPlayer = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
+        mPlayer.ApplyForce(mGravity);
         SpawnActor(mPlayer);
 
         // Creating world updater
@@ -79,6 +81,10 @@ public class Renderer extends SurfaceView
         mPhysicsUpdater.setDaemon(true);
         mPhysicsUpdater.begin();
         mPhysicsUpdater.start();
+
+        mBlockSpwaner = new Spawner(this);
+        mBlockSpwaner.setDaemon(true);
+        mBlockSpwaner.start();
     }
 
     public IActor Player() {
@@ -87,10 +93,14 @@ public class Renderer extends SurfaceView
 
     public void SpawnActor(IActor actor)
     {
+        if (actor == null)
+        {
+            return;
+        }
+
         mActorsLocker.lock();
         try {
             mActors.add(actor);
-            actor.ApplyForce(mGravity);
         }
         finally {
             mActorsLocker.unlock();
@@ -162,7 +172,7 @@ public class Renderer extends SurfaceView
                         if (mRenderer.getDisplayFPS())
                         {
                             int y = canvas.getHeight() - 20;
-                            canvas.drawText(String.format("FPS: %d", Math.round(1000 / elapsed)), 10, y, mTextPaint);
+                            canvas.drawText(String.format("FPS: %d W: %d H: %d", Math.round(1000 / elapsed), canvas.getWidth(), canvas.getHeight()), 10, y, mTextPaint);
                         }
 
                         for (IActor actor : mActors)
@@ -218,12 +228,52 @@ public class Renderer extends SurfaceView
                 {
                     for (IActor actor : mActors)
                     {
-                        actor.UpdatePhysics(elapsed);
+                        if (!actor.IsDead())
+                        {
+                            actor.UpdatePhysics(elapsed);
+                            if (actor.GetCoordinates().getY() <= 0 ||
+                                    actor.GetCoordinates().getY() >= canvas.getHeight() ||
+                                    actor.GetCoordinates().getX() <= 0)
+                            {
+                                actor.Kill();
+                            }
+                        }
                     }
                 }
                 catch (Exception e) { }
                 finally
                 {
+                }
+            }
+        }
+    }
+
+    private class Spawner extends Thread
+    {
+        Renderer mRenderer;
+
+        Spawner(Renderer renderer) {
+            mRenderer = renderer;
+        }
+
+        @Override
+        public void run() {
+            while (true)
+            {
+                Material defaultMaterial = new Material();
+                defaultMaterial.setElasticity(0);
+
+                Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.block);
+                IActor barrier = new Barrier(new Coordinate(1000, Math.abs(Math.random()) * 900), sprite, defaultMaterial);
+
+                barrier.ApplyImpulse(new Vector(-50, 0));
+
+                mRenderer.SpawnActor(barrier);
+
+                try {
+                    sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

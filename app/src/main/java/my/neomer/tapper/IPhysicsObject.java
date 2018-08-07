@@ -11,6 +11,9 @@ public interface IPhysicsObject {
 
     boolean IsStatic();
 
+    void Kill();
+    boolean IsDead();
+
     ICollisionRegion GetCollisionRegion();
 
 }
