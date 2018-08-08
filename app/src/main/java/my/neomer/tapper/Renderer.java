@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -95,9 +96,9 @@ public class Renderer extends SurfaceView
         mWorldUpdater.setDaemon(true);
         mWorldUpdater.begin();
 
-        mPhysicsUpdater = new PhysicsUpdater(this);
-        mPhysicsUpdater.setDaemon(true);
-        mPhysicsUpdater.begin();
+        //mPhysicsUpdater = new PhysicsUpdater(this);
+        //mPhysicsUpdater.setDaemon(true);
+        //mPhysicsUpdater.begin();
 
         mBlockSpwaner = new Spawner(this);
         mBlockSpwaner.setDaemon(true);
@@ -108,8 +109,8 @@ public class Renderer extends SurfaceView
         mWorldUpdater.begin();
         mWorldUpdater.start();
 
-        mPhysicsUpdater.begin();
-        mPhysicsUpdater.start();
+        //mPhysicsUpdater.begin();
+        //mPhysicsUpdater.start();
 
         mBlockSpwaner.begin();
         mBlockSpwaner.start();
@@ -117,7 +118,7 @@ public class Renderer extends SurfaceView
 
     private void StopPlay() {
         mWorldUpdater.End();
-        mPhysicsUpdater.end();
+        //mPhysicsUpdater.end();
         mBlockSpwaner.end();
     }
 
@@ -219,8 +220,7 @@ public class Renderer extends SurfaceView
                     canvas = mRenderer.getHolder().lockCanvas();
                     synchronized (mRenderer.getHolder())
                     {
-                        canvas.drawColor(backgroundColor);
-
+                        // Update physics
                         for (IActor actor : mActors)
                         {
                             if (!actor.IsDead())
@@ -256,6 +256,8 @@ public class Renderer extends SurfaceView
                             }
                         }
 
+                        // Draw scene
+                        //canvas.drawColor(backgroundColor);
                         for (IActor actor : mActors)
                         {
                             if (!actor.IsDead())
@@ -267,15 +269,18 @@ public class Renderer extends SurfaceView
                             }
                         }
 
+                        // Draw HUD
+
+                        // Draw FPS if needed
                         if (mRenderer.getDisplayFPS())
                         {
                             int y = canvas.getHeight() - 20;
-                            Rect r = mRenderer.Player().GetCollisionRegion().GetMappedRect(mRenderer.Player().GetCoordinates());
-                            canvas.drawText(String.format("FPS: %d W: %d H: %d RECT: %s",
+                            canvas.drawText(String.format(
+                                    Locale.ROOT,
+                                    "FPS: %d W: %d H: %d",
                                     Math.round(1000 / elapsed),
                                     canvas.getWidth(),
-                                    canvas.getHeight(),
-                                    r.toString()), 10, y, mTextPaint);
+                                    canvas.getHeight()), 10, y, mTextPaint);
                         }
 
                     }
