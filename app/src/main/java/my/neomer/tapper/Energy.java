@@ -1,12 +1,10 @@
 package my.neomer.tapper;
 
-import android.graphics.Bitmap;
-
-public class Barrier extends BaseActor {
+public class Energy extends BaseActor {
 
     private ICollisionRegion mCollisionRegion;
 
-    Barrier(Coordinate position, Sprite sprite, Material material) {
+    Energy(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
         mCollisionRegion = new RectangleCollisionRegion(this, sprite.GetWidth(), sprite.GetHeight());
@@ -24,6 +22,6 @@ public class Barrier extends BaseActor {
 
     @Override
     public boolean CanKill() {
-        return true;
+        return false;
     }
 }

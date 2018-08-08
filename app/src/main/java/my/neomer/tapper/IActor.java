@@ -9,4 +9,6 @@ public interface IActor extends IPhysicsObject {
     Sprite getSprite();
     Vector getVelocity();
 
+    boolean CanKill();
+
 }

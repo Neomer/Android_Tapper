@@ -82,8 +82,9 @@ public class Renderer extends SurfaceView
         Sprite sprite = new Sprite(
                 BitmapFactory.decodeResource(getResources(), R.drawable.eagle),
                 4);
-        sprite.setAnimationSpeed(1);
+        sprite.setAnimationSpeed(3);
         sprite.setScale(0.5);
+        sprite.Start();
 
         mPlayer = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
         mPlayer.ApplyForce(mGravity);
@@ -242,8 +243,15 @@ public class Renderer extends SurfaceView
 
                                 if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                                 {
-                                    mRenderer.Player().Kill();
-                                    mRenderer.StopPlay();
+                                    if (actor.CanKill())
+                                    {
+                                        mRenderer.Player().Kill();
+                                        mRenderer.StopPlay();
+                                    }
+                                    else
+                                    {
+                                        actor.Kill();
+                                    }
                                 }
                             }
                         }
@@ -386,8 +394,19 @@ public class Renderer extends SurfaceView
                 Material defaultMaterial = new Material();
                 defaultMaterial.setElasticity(0);
 
-                Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.block));
-                IActor barrier = new Barrier(new Coordinate(1000, Math.abs(Math.random()) * 900), sprite, defaultMaterial);
+                IActor barrier = null;
+                Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
+
+                if (Math.random() > 0.5) {
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.block));
+                    barrier = new Barrier(coordinates, sprite, defaultMaterial);
+                } else {
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.energy), 8);
+                    sprite.Start();
+                    sprite.setScale(0.3);
+                    sprite.setAnimationSpeed(2);
+                    barrier = new Energy(coordinates, sprite, defaultMaterial);
+                }
 
                 barrier.ApplyImpulse(new Vector(-50, 0));
 

@@ -37,6 +37,11 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
+    public boolean CanKill() {
+        return false;
+    }
+
+    @Override
     public void Jump() {
         ApplyImpulse(new Vector(0, -10));
     }

@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import java.util.Currency;
+
 public class Sprite
 {
     private Bitmap mBitmap;
@@ -24,6 +26,7 @@ public class Sprite
         mCurrentState = 0;
         mScale = 1;
         mDirection = 1;
+        mAnimation = false;
     }
 
     Sprite(Bitmap bitmap, int statesCount) {
@@ -34,6 +37,7 @@ public class Sprite
         mCurrentState = 0;
         mScale = 1;
         mDirection = 1;
+        mAnimation = false;
     }
 
     public Sprite(Bitmap bitmap) {
@@ -44,6 +48,7 @@ public class Sprite
         mCurrentState = 0;
         mScale = 1;
         mDirection = 1;
+        mAnimation = false;
     }
 
     void Start() {
@@ -57,8 +62,14 @@ public class Sprite
     void Update(double timeSpan) {
         if (mAnimation) {
             mCurrentState += (timeSpan * mAnimationSpeed * mDirection);
-            if (mCurrentState >= mStatesCount) {
-                mCurrentState -= mStatesCount;
+            if (mStatesCount - mCurrentState <= 0) {
+                mCurrentState = mStatesCount - 1;
+                mDirection = -1;
+            }
+
+            if (mCurrentState <= 0) {
+                mCurrentState = timeSpan * mAnimationSpeed;
+                mDirection = 1;
             }
         }
     }

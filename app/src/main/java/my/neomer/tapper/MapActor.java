@@ -8,6 +8,11 @@ public class MapActor extends BaseActor {
     }
 
     @Override
+    public boolean CanKill() {
+        return false;
+    }
+
+    @Override
     public boolean IsStatic() {
         return false;
     }
