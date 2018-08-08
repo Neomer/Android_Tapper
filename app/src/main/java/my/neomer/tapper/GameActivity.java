@@ -4,37 +4,25 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
-    private Button btnNewGame, btnSettings, btnExit;
+    private Renderer renderer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setupWindowSettings();
-        loadActions();
 
+        renderer = new Renderer(this);
 
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        setContentView(R.layout.activity_main);
+        setContentView(renderer);
     }
 
-    private void loadActions() {
-        btnNewGame = (Button) findViewById(R.id.btnNewGame);
-        btnSettings = (Button) findViewById(R.id.btnSettings);
-        btnExit = (Button) findViewById(R.id.btnExit);
-    }
+
 
     private void setupWindowSettings() {
         ActionBar actionBar = getSupportActionBar();
@@ -48,4 +36,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     }
+
+
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="PlayStart">Начать игру</string>
+    <string name="Exit">Выйти</string>
+    <string name="Settings">Настройки</string>
+</resources>
