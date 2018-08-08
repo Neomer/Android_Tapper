@@ -1,12 +1,16 @@
 package my.neomer.tapper;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,8 +21,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setupWindowSettings();
+
+        setContentView(R.layout.activity_main);
+
         loadActions();
 
+        btnNewGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGame();
+            }
+        });
 
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,7 +40,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setContentView(R.layout.activity_main);
+        getWindow().getDecorView().setBackgroundColor(Color.parseColor("#000000"));
+    }
+
+    private void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 
     private void loadActions() {
