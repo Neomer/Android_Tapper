@@ -69,7 +69,10 @@ public class Renderer extends SurfaceView
         mGravity = new GravityForce();
 
         // Creating a main player
-        Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.projectile);
+        Sprite sprite = new Sprite(
+                BitmapFactory.decodeResource(getResources(), R.drawable.bird_100),
+                2);
+        sprite.setScale(0.5);
 
         Material defaultMaterial = new Material();
         defaultMaterial.setElasticity(0);
@@ -183,6 +186,10 @@ public class Renderer extends SurfaceView
         public void run()
         {
             long start = System.currentTimeMillis();
+
+            Paint mCollisionPainter = new Paint();
+            mCollisionPainter.setARGB(50, 0,255,0);
+
             while (mRun)
             {
                 long now = System.currentTimeMillis();
@@ -213,7 +220,10 @@ public class Renderer extends SurfaceView
                         {
                             if (!actor.IsDead())
                             {
+                                Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
+
                                 actor.Draw(canvas);
+                                canvas.drawRect(rect, mCollisionPainter);
                             }
                         }
                     }
@@ -275,16 +285,22 @@ public class Renderer extends SurfaceView
                             actor.UpdatePhysics(elapsed);
 
                             Coordinate actorCoordinate = actor.GetCoordinates();
+
                             if (actorCoordinate.getX() <= 0 ||
                                     actorCoordinate.getY() <= 0 ||
-                                    actorCoordinate.getY() >= 900 ||
-                                    (actor != player && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion())))
+                                    actorCoordinate.getY() >= 900)
                             {
                                 actor.Kill();
                                 if (actor == Player())
                                 {
                                     mRenderer.StopPlay();
                                 }
+                            }
+
+                            if (actor != player && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                            {
+                                mRenderer.Player().Kill();
+                                mRenderer.StopPlay();
                             }
                         }
                     }
@@ -326,7 +342,7 @@ public class Renderer extends SurfaceView
                 Material defaultMaterial = new Material();
                 defaultMaterial.setElasticity(0);
 
-                Bitmap sprite = BitmapFactory.decodeResource(getResources(), R.drawable.block);
+                Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.block));
                 IActor barrier = new Barrier(new Coordinate(1000, Math.abs(Math.random()) * 900), sprite, defaultMaterial);
 
                 barrier.ApplyImpulse(new Vector(-50, 0));

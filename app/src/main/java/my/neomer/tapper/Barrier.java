@@ -6,10 +6,10 @@ public class Barrier extends BaseActor {
 
     private ICollisionRegion mCollisionRegion;
 
-    Barrier(Coordinate position, Bitmap sprite, Material material) {
+    Barrier(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(this, sprite.getWidth(), sprite.getHeight());
+        mCollisionRegion = new RectangleCollisionRegion(this, sprite.GetWidth(), sprite.GetHeight());
     }
 
     @Override

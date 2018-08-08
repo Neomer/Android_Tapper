@@ -3,6 +3,8 @@ package my.neomer.tapper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.health.TimerStat;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,16 +19,16 @@ import java.util.ListIterator;
 abstract class BaseActor implements IActor {
     private Coordinate mPosition;
     private Vector mVelocity;
-    private Bitmap mBitmap;
+    private Sprite mSprite;
     private List<Vector> mForces;
     private Paint fontPaint;
     private Material mMaterial;
 
     private boolean mDead;
 
-    BaseActor(Coordinate position, Bitmap sprite, Material material)
+    BaseActor(Coordinate position, Sprite sprite, Material material)
     {
-        mBitmap = sprite;
+        mSprite = sprite;
         mPosition = position;
 
         mVelocity = new Vector();
@@ -60,7 +62,15 @@ abstract class BaseActor implements IActor {
     {
         //canvas.drawText(String.format("Velocity: %s", mVelocity.toString()), 10, 20, fontPaint);
         //canvas.drawText(String.format("Position: %s", mPosition.toString()), 10, 40, fontPaint);
-        canvas.drawBitmap(mBitmap, (int) mPosition.getX(),(int) mPosition.getY(), null);
+        Rect dstRect = new Rect(
+                (int) mPosition.getX(),
+                (int) mPosition.getY(),
+                (int) (mPosition.getX() + mSprite.GetWidth()),
+                (int) (mPosition.getY() + mSprite.GetHeight())),
+            srcRect = mSprite.GetCurrentMask();
+
+        canvas.drawBitmap(mSprite.GetBitmap(), srcRect, dstRect, null);
+        //canvas.drawBitmap(mSprite.GetBitmap(), (int)mPosition.getX(), (int)mPosition.getY(), null);
     }
 
     @Override
@@ -80,6 +90,8 @@ abstract class BaseActor implements IActor {
         if (IsStatic() || IsDead()) {
             return;
         }
+
+        mSprite.Update(timeSpan);
 
         updateVelocity(timeSpan);
 

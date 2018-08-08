@@ -8,10 +8,10 @@ class PlayerActor extends BaseActor implements IControllable
 {
     private ICollisionRegion mCollisionRegion;
 
-    PlayerActor(Coordinate position, Bitmap sprite, Material material) {
+    PlayerActor(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(this, sprite.getWidth(), sprite.getHeight());
+        mCollisionRegion = new RectangleCollisionRegion(this, sprite.GetWidth(), sprite.GetHeight());
     }
 
     @Override

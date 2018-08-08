@@ -34,6 +34,11 @@ public class RectangleCollisionRegion implements ICollisionRegion {
     }
 
     public boolean checkIntersect(ICollisionRegion collisionRegion) {
+        if (collisionRegion == null)
+        {
+            return false;
+        }
+
         if (collisionRegion instanceof RectangleCollisionRegion)
         {
             RectangleCollisionRegion rectRegion = (RectangleCollisionRegion) collisionRegion;
@@ -42,11 +47,12 @@ public class RectangleCollisionRegion implements ICollisionRegion {
             Rect rect1 = GetMappedRect(coords1),
                     rect2 =  collisionRegion.GetMappedRect(coords2);
 
-            return rect1.left < rect2.right &&
-                    rect1.right > rect2.left &&
-                    rect1.bottom < rect2.top &&
-                    rect1.top > rect2.bottom;
+            return rect1.left <= rect2.right &&
+                    rect1.right >= rect2.left &&
+                    rect1.bottom <= rect2.top &&
+                    rect1.top >= rect2.bottom;
         }
+
         return false;
     }
 
