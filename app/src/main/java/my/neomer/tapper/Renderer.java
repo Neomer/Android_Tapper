@@ -70,7 +70,7 @@ public class Renderer extends SurfaceView
 
         // Creating a main player
         Sprite sprite = new Sprite(
-                BitmapFactory.decodeResource(getResources(), R.drawable.bird_100),
+                BitmapFactory.decodeResource(getResources(), R.drawable.bird_sprite),
                 2);
         sprite.setScale(0.5);
 
@@ -220,10 +220,10 @@ public class Renderer extends SurfaceView
                         {
                             if (!actor.IsDead())
                             {
-                                Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
-
                                 actor.Draw(canvas);
-                                canvas.drawRect(rect, mCollisionPainter);
+                                // Draw collision region
+                                //Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
+                                //canvas.drawRect(rect, mCollisionPainter);
                             }
                         }
                     }
