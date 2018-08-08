@@ -68,14 +68,22 @@ public class Renderer extends SurfaceView
         // Load global forces
         mGravity = new GravityForce();
 
-        // Creating a main player
-        Sprite sprite = new Sprite(
-                BitmapFactory.decodeResource(getResources(), R.drawable.bird_sprite),
-                2);
-        sprite.setScale(0.5);
-
+        // Default material without reflections
         Material defaultMaterial = new Material();
         defaultMaterial.setElasticity(0);
+
+        // Creating map
+        Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.map));
+        IActor mapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
+        mapActor.ApplyImpulse(new Vector(-5, 0));
+        SpawnActor(mapActor);
+
+        // Creating a main player
+        Sprite sprite = new Sprite(
+                BitmapFactory.decodeResource(getResources(), R.drawable.eagle),
+                4);
+        sprite.setAnimationSpeed(1);
+        sprite.setScale(0.5);
 
         mPlayer = new PlayerActor(new Coordinate(50, 550), sprite, defaultMaterial);
         mPlayer.ApplyForce(mGravity);
@@ -92,6 +100,7 @@ public class Renderer extends SurfaceView
 
         mBlockSpwaner = new Spawner(this);
         mBlockSpwaner.setDaemon(true);
+
     }
 
     private void BeginPlay() {
@@ -190,11 +199,17 @@ public class Renderer extends SurfaceView
             Paint mCollisionPainter = new Paint();
             mCollisionPainter.setARGB(50, 0,255,0);
 
+            int backgroundColor = Color.parseColor("#160B0B");
+
+            IActor player = mRenderer.Player();
+
             while (mRun)
             {
                 long now = System.currentTimeMillis();
                 double elapsed = now - start;
                 start = now;
+
+                double elapsedPhys = elapsed * 0.005;
 
                 Canvas canvas = null;
                 try
@@ -203,7 +218,46 @@ public class Renderer extends SurfaceView
                     canvas = mRenderer.getHolder().lockCanvas();
                     synchronized (mRenderer.getHolder())
                     {
-                        canvas.drawColor(Color.WHITE);
+                        canvas.drawColor(backgroundColor);
+
+                        for (IActor actor : mActors)
+                        {
+                            if (!actor.IsDead())
+                            {
+                                actor.UpdatePhysics(elapsedPhys);
+                                actor.getSprite().Update(elapsedPhys);
+
+                                Coordinate actorCoordinate = actor.GetCoordinates();
+
+                                if (actorCoordinate.getX() <= 0 ||
+                                        actorCoordinate.getY() <= 0 ||
+                                        actorCoordinate.getY() >= 900)
+                                {
+                                    actor.Kill();
+                                    if (actor == Player())
+                                    {
+                                        mRenderer.StopPlay();
+                                    }
+                                }
+
+                                if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                                {
+                                    mRenderer.Player().Kill();
+                                    mRenderer.StopPlay();
+                                }
+                            }
+                        }
+
+                        for (IActor actor : mActors)
+                        {
+                            if (!actor.IsDead())
+                            {
+                                actor.Draw(canvas);
+                                // Draw collision regions
+                                //Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
+                                //canvas.drawRect(rect, mCollisionPainter);
+                            }
+                        }
 
                         if (mRenderer.getDisplayFPS())
                         {
@@ -216,16 +270,6 @@ public class Renderer extends SurfaceView
                                     r.toString()), 10, y, mTextPaint);
                         }
 
-                        for (IActor actor : mActors)
-                        {
-                            if (!actor.IsDead())
-                            {
-                                actor.Draw(canvas);
-                                // Draw collision region
-                                //Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
-                                //canvas.drawRect(rect, mCollisionPainter);
-                            }
-                        }
                     }
                 }
                 catch (Exception e) { }
@@ -257,7 +301,7 @@ public class Renderer extends SurfaceView
 
         public void begin()
         {
-            mRun = true;
+            mRun = false;
         }
 
         public  void end()
@@ -297,7 +341,7 @@ public class Renderer extends SurfaceView
                                 }
                             }
 
-                            if (actor != player && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                            if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                             {
                                 mRenderer.Player().Kill();
                                 mRenderer.StopPlay();

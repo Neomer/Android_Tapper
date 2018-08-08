@@ -91,8 +91,6 @@ abstract class BaseActor implements IActor {
             return;
         }
 
-        mSprite.Update(timeSpan);
-
         updateVelocity(timeSpan);
 
         Vector v = mVelocity.Clone();
@@ -114,5 +112,13 @@ abstract class BaseActor implements IActor {
         }
         resultForce.Multiply(timeSpan);
         mVelocity.Add(resultForce);
+    }
+
+    public Vector getVelocity() {
+        return mVelocity;
+    }
+
+    public Sprite getSprite() {
+        return mSprite;
     }
 }

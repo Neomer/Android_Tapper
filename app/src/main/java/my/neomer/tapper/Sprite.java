@@ -12,6 +12,8 @@ public class Sprite
     private double mAnimationSpeed;
     private Coordinate mMask;
     private double mScale;
+    private int mDirection;
+    private boolean mAnimation;
 
 
     Sprite(Bitmap bitmap, Coordinate mask, int statesCount) {
@@ -21,6 +23,7 @@ public class Sprite
         mAnimationSpeed = 1;
         mCurrentState = 0;
         mScale = 1;
+        mDirection = 1;
     }
 
     Sprite(Bitmap bitmap, int statesCount) {
@@ -30,6 +33,7 @@ public class Sprite
         mAnimationSpeed = 1;
         mCurrentState = 0;
         mScale = 1;
+        mDirection = 1;
     }
 
     public Sprite(Bitmap bitmap) {
@@ -39,12 +43,23 @@ public class Sprite
         mAnimationSpeed = 1;
         mCurrentState = 0;
         mScale = 1;
+        mDirection = 1;
+    }
+
+    void Start() {
+        mAnimation = true;
+    }
+
+    void Stop() {
+        mAnimation = false;
     }
 
     void Update(double timeSpan) {
-        mCurrentState += timeSpan * mAnimationSpeed;
-        if (mCurrentState > mStatesCount) {
-            mCurrentState -= mStatesCount;
+        if (mAnimation) {
+            mCurrentState += (timeSpan * mAnimationSpeed * mDirection);
+            if (mCurrentState >= mStatesCount) {
+                mCurrentState -= mStatesCount;
+            }
         }
     }
 
@@ -71,5 +86,9 @@ public class Sprite
 
     public void setScale(double scale) {
         this.mScale = scale;
+    }
+
+    public void setAnimationSpeed(double animationSpeed) {
+        mAnimationSpeed = animationSpeed;
     }
 }

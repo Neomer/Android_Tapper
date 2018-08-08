@@ -25,6 +25,18 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
+    public void UpdatePhysics(double timeSpan) {
+        super.UpdatePhysics(timeSpan);
+        /*
+        if (getVelocity().getY() < 0) {
+            getSprite().Start();
+        } else {
+            getSprite().Stop();
+        }
+        */
+    }
+
+    @Override
     public void Jump() {
         ApplyImpulse(new Vector(0, -10));
     }
