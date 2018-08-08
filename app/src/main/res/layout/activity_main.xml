@@ -7,8 +7,8 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="201dp"
-        android:layout_height="156dp"
+        android:layout_width="202dp"
+        android:layout_height="265dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
@@ -23,25 +23,36 @@
             android:id="@+id/btnNewGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/image_button"
             android:text="@string/PlayStart"
+            android:textColor="@color/fontMainMenu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.054"
             tools:text="@string/PlayStart" />
 
         <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/image_button"
             android:text="@string/Settings"
+            android:textColor="@color/fontMainMenu"
             tools:text="@string/Settings" />
 
         <Button
             android:id="@+id/btnExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/image_button"
             android:text="@string/Exit"
+            android:textColor="@color/fontMainMenu"
             tools:text="@string/Exit" />
 
     </LinearLayout>
