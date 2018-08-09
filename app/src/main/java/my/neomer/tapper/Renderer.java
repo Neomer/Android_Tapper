@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.media.MediaCodec;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
+import android.security.ConfirmationAlreadyPresentingException;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
@@ -205,7 +206,29 @@ public class Renderer extends SurfaceView
 
             IActor player = mRenderer.Player();
 
-            while (mRun)
+            Canvas canvas = null;
+
+            // Draw countdown screen
+            try {
+                // подготовка Canvas-а
+                canvas = mRenderer.getHolder().lockCanvas();
+                synchronized (mRenderer.getHolder())
+                {
+                    int w = canvas.getWidth(),
+                            h = canvas.getHeight();
+
+
+                }
+            }
+            catch (Exception ex) {}
+            finally {
+                if (canvas != null)
+                {
+                    mRenderer.getHolder().unlockCanvasAndPost(canvas);
+                }
+            }
+
+                while (mRun)
             {
                 long now = System.currentTimeMillis();
                 double elapsed = now - start;
