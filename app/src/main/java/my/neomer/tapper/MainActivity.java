@@ -1,15 +1,20 @@
 package my.neomer.tapper;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Renderer renderer;
+    private Button btnNewGame, btnSettings, btnExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +22,37 @@ public class MainActivity extends AppCompatActivity {
 
         setupWindowSettings();
 
-        renderer = new Renderer(this);
+        setContentView(R.layout.activity_main);
 
-        setContentView(renderer);
+        loadActions();
+
+        btnNewGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGame();
+            }
+        });
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        getWindow().getDecorView().setBackgroundColor(Color.parseColor("#000000"));
     }
 
+    private void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+    }
 
+    private void loadActions() {
+        btnNewGame = (Button) findViewById(R.id.btnNewGame);
+        btnSettings = (Button) findViewById(R.id.btnSettings);
+        btnExit = (Button) findViewById(R.id.btnExit);
+    }
 
     private void setupWindowSettings() {
         ActionBar actionBar = getSupportActionBar();
@@ -36,6 +66,4 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     }
-
-
 }

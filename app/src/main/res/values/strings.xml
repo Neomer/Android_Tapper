@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">tapper</string>
+    <string name="app_name" translatable="false">BirdFly</string>
+    <string name="PlayStart">New game</string>
+    <string name="Exit">Exit</string>
+    <string name="Settings">Settings</string>
 </resources>
