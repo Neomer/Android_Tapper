@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         btnExit = (Button) findViewById(R.id.btnExit);
 
         Typeface mainFont = null;
-
         try
         {
             mainFont = Typeface.createFromAsset(getAssets(), "fonts/main-font.otf");

@@ -9,9 +9,11 @@ import java.lang.invoke.ConstantCallSite;
 
 class PlayerActor extends BaseActor implements IControllable
 {
+    public static final double MAX_ENERGY  = 100; // Energy limit
+    private static final int ENERGY_BOOST = 25;   // Energy value increase
+
     private ICollisionRegion mCollisionRegion;
     private double mEnergy;
-    private static final double MAX_ENERGY  = 100;
 
 
     PlayerActor(Coordinate position, Sprite sprite, Material material) {
@@ -55,6 +57,10 @@ class PlayerActor extends BaseActor implements IControllable
 
     public double getEnergy() {
         return mEnergy;
+    }
+
+    public void AddEnergy() {
+        mEnergy += ENERGY_BOOST;
     }
 
 }

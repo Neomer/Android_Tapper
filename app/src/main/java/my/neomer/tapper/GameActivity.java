@@ -17,7 +17,7 @@ public class GameActivity extends AppCompatActivity {
 
         setupWindowSettings();
 
-        renderer = new Renderer(this);
+        renderer = new Renderer(this, getAssets());
 
         setContentView(renderer);
     }

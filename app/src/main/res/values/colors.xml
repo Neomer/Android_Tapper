@@ -6,4 +6,7 @@
 
 
     <color name="fontMainMenu">#996600</color>
+
+    <color name="HUDenergy">#00ff00</color>
+    <color name="HUDfontTime">#FFCC33</color>
 </resources>
