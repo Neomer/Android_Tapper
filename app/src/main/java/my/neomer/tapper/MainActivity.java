@@ -3,6 +3,7 @@ package my.neomer.tapper;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
         btnNewGame = (Button) findViewById(R.id.btnNewGame);
         btnSettings = (Button) findViewById(R.id.btnSettings);
         btnExit = (Button) findViewById(R.id.btnExit);
+
+        Typeface mainFont = null;
+
+        try
+        {
+            mainFont = Typeface.createFromAsset(getAssets(), "fonts/main-font.otf");
+        }
+        catch (Exception ex) {}
+
+        if (mainFont != null)
+        {
+            btnNewGame.setTypeface(mainFont);
+            btnSettings.setTypeface(mainFont);
+            btnExit.setTypeface(mainFont);
+        }
     }
 
     private void setupWindowSettings() {
