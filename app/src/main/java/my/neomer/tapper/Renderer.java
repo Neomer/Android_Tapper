@@ -208,27 +208,7 @@ public class Renderer extends SurfaceView
 
             Canvas canvas = null;
 
-            // Draw countdown screen
-            try {
-                // подготовка Canvas-а
-                canvas = mRenderer.getHolder().lockCanvas();
-                synchronized (mRenderer.getHolder())
-                {
-                    int w = canvas.getWidth(),
-                            h = canvas.getHeight();
-
-
-                }
-            }
-            catch (Exception ex) {}
-            finally {
-                if (canvas != null)
-                {
-                    mRenderer.getHolder().unlockCanvasAndPost(canvas);
-                }
-            }
-
-                while (mRun)
+            while (mRun)
             {
                 long now = System.currentTimeMillis();
                 double elapsed = now - start;
@@ -236,7 +216,6 @@ public class Renderer extends SurfaceView
 
                 double elapsedPhys = elapsed * 0.005;
 
-                Canvas canvas = null;
                 try
                 {
                     // подготовка Canvas-а
