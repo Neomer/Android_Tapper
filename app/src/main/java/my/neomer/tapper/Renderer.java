@@ -1,6 +1,7 @@
 package my.neomer.tapper;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -35,6 +36,9 @@ public class Renderer extends SurfaceView
     private WorldUpdater mWorldUpdater;
     private PhysicsUpdater mPhysicsUpdater;
     private Spawner mBlockSpwaner;
+    private HUD mHUD;
+    private long mStartTime;
+    private AssetManager mAssets;
 
     private Lock mActorsLocker;
 
@@ -57,12 +61,17 @@ public class Renderer extends SurfaceView
         return true;
     }
 
-    public Renderer(Context context)
+    public AssetManager getAssets() {
+        return mAssets;
+    }
+
+    public Renderer(Context context, AssetManager assets)
     {
         super(context);
 
         bRun = false;
-        mDisplayFPS = true;
+        mDisplayFPS = false;
+        mAssets = assets;
 
         mActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
@@ -79,6 +88,9 @@ public class Renderer extends SurfaceView
         IActor mapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
         mapActor.ApplyImpulse(new Vector(-5, 0));
         SpawnActor(mapActor);
+
+        //Creating HUD
+        mHUD = new HUD(this);
 
         // Creating a main player
         Sprite sprite = new Sprite(
@@ -107,6 +119,9 @@ public class Renderer extends SurfaceView
     }
 
     private void BeginPlay() {
+
+        mStartTime = System.currentTimeMillis();
+
         mWorldUpdater.begin();
         mWorldUpdater.start();
 
@@ -123,8 +138,12 @@ public class Renderer extends SurfaceView
         mBlockSpwaner.end();
     }
 
-    public IActor Player() {
-        return mPlayer;
+    public long GetGameTime() {
+        return System.currentTimeMillis() - mStartTime;
+    }
+
+    public PlayerActor Player() {
+        return (PlayerActor)mPlayer;
     }
 
     public void SpawnActor(IActor actor)
@@ -204,7 +223,7 @@ public class Renderer extends SurfaceView
 
             int backgroundColor = Color.parseColor("#160B0B");
 
-            IActor player = mRenderer.Player();
+            PlayerActor player = mRenderer.Player();
 
             Canvas canvas = null;
 
@@ -248,11 +267,15 @@ public class Renderer extends SurfaceView
                                     if (actor.CanKill())
                                     {
                                         mRenderer.Player().Kill();
-                                        mRenderer.StopPlay();
                                     }
                                     else
                                     {
                                         actor.Kill();
+
+                                        if (actor instanceof Energy)
+                                        {
+                                            player.AddEnergy();
+                                        }
                                     }
                                 }
                             }
@@ -272,6 +295,7 @@ public class Renderer extends SurfaceView
                         }
 
                         // Draw HUD
+                        mHUD.Draw(canvas);
 
                         // Draw FPS if needed
                         if (mRenderer.getDisplayFPS())
@@ -284,7 +308,10 @@ public class Renderer extends SurfaceView
                                     canvas.getWidth(),
                                     canvas.getHeight()), 10, y, mTextPaint);
                         }
-
+                    }
+                    if (player.IsDead())
+                    {
+                        mRenderer.StopPlay();
                     }
                 }
                 catch (Exception e) { }
