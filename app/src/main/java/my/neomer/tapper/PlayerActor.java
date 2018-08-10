@@ -19,7 +19,7 @@ class PlayerActor extends BaseActor implements IControllable
     PlayerActor(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(this, sprite.GetWidth(), sprite.GetHeight());
+        mCollisionRegion = new RectangleCollisionRegion(this, 0, 20, sprite.GetWidth(), sprite.GetHeight() - 40);
         mEnergy = PlayerActor.MAX_ENERGY;
     }
 

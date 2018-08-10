@@ -4,10 +4,20 @@ import android.graphics.Rect;
 
 public class RectangleCollisionRegion implements ICollisionRegion {
 
-    private double mWidth, mHeight;
+    private double mWidth, mHeight, mLeft, mTop;
     private IPhysicsObject mPhysicsObject;
 
     RectangleCollisionRegion(IPhysicsObject owner, double width, double height) {
+        mLeft = 0;
+        mTop = 0;
+        mWidth = width;
+        mHeight = height;
+        mPhysicsObject = owner;
+    }
+
+    RectangleCollisionRegion(IPhysicsObject owner, double left, double top, double width, double height) {
+        mLeft = left;
+        mTop = top;
         mWidth = width;
         mHeight = height;
         mPhysicsObject = owner;
@@ -63,9 +73,9 @@ public class RectangleCollisionRegion implements ICollisionRegion {
     @Override
     public Rect GetMappedRect(Coordinate point) {
         return new Rect(
-                (int)mPhysicsObject.GetCoordinates().getX(),
-                (int)mPhysicsObject.GetCoordinates().getY(),
-                (int)(mPhysicsObject.GetCoordinates().getX() + getWidth()),
-                (int)(mPhysicsObject.GetCoordinates().getY() + getHeight()));
+                (int)(mPhysicsObject.GetCoordinates().getX() + mLeft),
+                (int)(mPhysicsObject.GetCoordinates().getY() + mTop),
+                (int)(mPhysicsObject.GetCoordinates().getX() + mLeft + getWidth()),
+                (int)(mPhysicsObject.GetCoordinates().getY() + mTop + getHeight()));
     }
 }

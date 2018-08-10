@@ -289,8 +289,12 @@ public class Renderer extends SurfaceView
                             {
                                 actor.Draw(canvas);
                                 // Draw collision regions
-                                //Rect rect = actor.GetCollisionRegion().GetMappedRect(actor.GetCoordinates());
-                                //canvas.drawRect(rect, mCollisionPainter);
+                                ICollisionRegion collisionRegion = actor.GetCollisionRegion();
+                                if (collisionRegion != null)
+                                {
+                                    Rect rect = collisionRegion.GetMappedRect(actor.GetCoordinates().Clone());
+                                    canvas.drawRect(rect, mCollisionPainter);
+                                }
                             }
                         }
 
