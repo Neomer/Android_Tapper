@@ -3,4 +3,7 @@
     <string name="PlayStart">New game</string>
     <string name="Exit">Exit</string>
     <string name="Settings">Settings</string>
+    <string name="GameResults">Game Results:</string>
+    <string name="TotalTime">Total Lifеtime</string>
+    <string name="MainMenu">Main menu</string>
 </resources>

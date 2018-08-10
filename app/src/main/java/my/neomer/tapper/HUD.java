@@ -75,14 +75,8 @@ public class HUD {
         
         canvas.drawRect(startPosition, 40, length, mBitmapEnergy.getHeight() + 40, mRectPaint);
 
-        long time = mRenderer.GetGameTime();
-        int min = (int)(time / 60000);
-        int sec = (int)(time % 60000 * 0.001);
-        int msec = (int)(time % 100);
-
-        String sTime = String.format("%02d:%02d.%02d", min, sec, msec);
         canvas.drawText(
-                sTime,
+                TimeHelper.StringTimeFromMilliseconds(mRenderer.GetGameTime()),
                 (int)(canvas.getWidth() * 0.5 - mHalfTextWidth * 0.5),
                 40 + mTextPaint.getTextSize(),
                 mTextPaint);

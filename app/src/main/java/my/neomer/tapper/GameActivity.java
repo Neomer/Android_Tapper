@@ -1,5 +1,6 @@
 package my.neomer.tapper;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,22 @@ public class GameActivity extends AppCompatActivity {
 
         renderer = new Renderer(this, getAssets());
 
+        renderer.setOnGameOverLisener(new OnGameOverListener() {
+            @Override
+            public void OnGameOver(GameResults results) {
+                ShowResults(results);
+            }
+        });
+
         setContentView(renderer);
     }
 
+    private void ShowResults(GameResults results) {
+        Intent intent = new Intent(this, ResultsActivity.class);
+        intent.putExtra("game_results", results);
+
+        startActivity(intent);
+    }
 
 
     private void setupWindowSettings() {
