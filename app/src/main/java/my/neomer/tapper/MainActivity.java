@@ -18,6 +18,13 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNewGame, btnSettings, btnExit;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        stopService(new Intent(this, MusicService.class));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -42,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getWindow().getDecorView().setBackgroundColor(Color.parseColor("#000000"));
+
+        startService(new Intent(this, MusicService.class));
     }
 
     private void startGame() {
