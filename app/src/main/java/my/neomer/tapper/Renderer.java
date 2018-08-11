@@ -48,6 +48,8 @@ public class Renderer extends SurfaceView
 
     private IActor mPlayer;
 
+    private OnGameOverListener mOnGameOverLisener = null;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!bRun)
@@ -106,15 +108,12 @@ public class Renderer extends SurfaceView
 
         // Creating world updater
         mWorldUpdater = new WorldUpdater(this);
-        mWorldUpdater.setDaemon(true);
         mWorldUpdater.begin();
 
         //mPhysicsUpdater = new PhysicsUpdater(this);
-        //mPhysicsUpdater.setDaemon(true);
         //mPhysicsUpdater.begin();
 
         mBlockSpwaner = new Spawner(this);
-        mBlockSpwaner.setDaemon(true);
 
     }
 
@@ -136,6 +135,28 @@ public class Renderer extends SurfaceView
         mWorldUpdater.End();
         //mPhysicsUpdater.end();
         mBlockSpwaner.end();
+
+        if (mOnGameOverLisener != null)
+        {
+            GameResults gameResults = new GameResults();
+            gameResults.setTotalTime(GetGameTime());
+
+            try {
+                if (mWorldUpdater.isAlive())
+                {
+                    mWorldUpdater.interrupt();
+                    mWorldUpdater.join();
+                }
+            } catch (InterruptedException e) { }
+            try {
+                if (mBlockSpwaner.isAlive()) {
+                    mBlockSpwaner.interrupt();
+                    mBlockSpwaner.join();
+                }
+            } catch (InterruptedException e) { }
+
+            mOnGameOverLisener.OnGameOver(gameResults);
+        }
     }
 
     public long GetGameTime() {
@@ -184,6 +205,10 @@ public class Renderer extends SurfaceView
 
     public boolean getDisplayFPS() {
         return mDisplayFPS;
+    }
+
+    public void setOnGameOverLisener(OnGameOverListener gameOverLisener) {
+        this.mOnGameOverLisener = gameOverLisener;
     }
 
 
@@ -427,11 +452,11 @@ public class Renderer extends SurfaceView
 
         @Override
         public void run() {
+            Material defaultMaterial = new Material();
+            defaultMaterial.setElasticity(0);
+
             while (mRun)
             {
-                Material defaultMaterial = new Material();
-                defaultMaterial.setElasticity(0);
-
                 IActor barrier = null;
                 Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
 
@@ -445,16 +470,15 @@ public class Renderer extends SurfaceView
                     sprite.setAnimationSpeed(2);
                     barrier = new Energy(coordinates, sprite, defaultMaterial);
                 }
-
-                barrier.ApplyImpulse(new Vector(-50, 0));
-
-                mRenderer.SpawnActor(barrier);
+                if (barrier != null)
+                {
+                    barrier.ApplyImpulse(new Vector(-50, 0));
+                    mRenderer.SpawnActor(barrier);
+                }
 
                 try {
                     sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException e) { }
             }
         }
     }
