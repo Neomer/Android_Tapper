@@ -46,13 +46,11 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
-    public boolean IsDead() {
-        return super.IsDead() || getEnergy() <= 0;
-    }
-
-    @Override
     public void Jump() {
-        ApplyImpulse(new Vector(0, -10));
+        if (mEnergy > 0)
+        {
+            ApplyImpulse(new Vector(0, -10));
+        }
     }
 
     public double getEnergy() {
