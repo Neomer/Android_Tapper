@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseGameActivity {
 
     private Button btnNewGame, btnSettings, btnExit;
 
@@ -76,18 +76,5 @@ public class MainActivity extends AppCompatActivity {
             btnSettings.setTypeface(mainFont);
             btnExit.setTypeface(mainFont);
         }
-    }
-
-    private void setupWindowSettings() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.hide();
-        }
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
     }
 }
