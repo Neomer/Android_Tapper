@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends BaseGameActivity {
 
     private TextView tvTotalTime;
     private Button btnToMainMenu;
@@ -80,16 +80,4 @@ public class ResultsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setupWindowSettings() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.hide();
-        }
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-    }
 }

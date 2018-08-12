@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends BaseGameActivity {
 
     private Renderer renderer;
 
@@ -35,20 +35,6 @@ public class GameActivity extends AppCompatActivity {
         intent.putExtra("game_results", results);
 
         startActivity(intent);
-    }
-
-
-    private void setupWindowSettings() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.hide();
-        }
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
     }
 
 
