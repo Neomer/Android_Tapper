@@ -73,7 +73,7 @@ public class HUD {
         int startPosition = mBitmapEnergy.getWidth() + 40;
         int length = (int) (player.getEnergy() / PlayerActor.MAX_ENERGY * ENERGY_LENGTH) + startPosition;
         
-        canvas.drawRect(startPosition, 40, length, mBitmapEnergy.getHeight() + 40, mRectPaint);
+        canvas.drawRect(startPosition, 40, length >= startPosition ? length : startPosition, mBitmapEnergy.getHeight() + 40, mRectPaint);
 
         canvas.drawText(
                 TimeHelper.StringTimeFromMilliseconds(mRenderer.GetGameTime()),
