@@ -46,6 +46,7 @@ public class Renderer extends SurfaceView
     private boolean mDisplayFPS;
 
     private IActor mPlayer;
+    private MapActor mMapActor;
 
     private OnGameOverListener mOnGameOverLisener = null;
 
@@ -77,6 +78,8 @@ public class Renderer extends SurfaceView
         mActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
 
+        setDisplayFPS(true);
+
         // Load global forces
         mGravity = new GravityForce();
 
@@ -95,6 +98,12 @@ public class Renderer extends SurfaceView
         mapActor.ApplyImpulse(new Vector(-5, 0));
         SpawnActor(mapActor);
         */
+
+        Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.brick));
+        mapStrite.setScale(0.2);
+        mMapActor = new MapActor(new Coordinate(0, 0),
+                mapStrite,
+                defaultMaterial);
 
         //Creating HUD
         mHUD = new HUD(this);
@@ -265,6 +274,8 @@ public class Renderer extends SurfaceView
                     synchronized (mRenderer.getHolder())
                     {
                         canvas.drawColor(Color.BLACK);
+
+                        mMapActor.Draw(canvas);
 
                         // Update physics
                         for (IActor actor : mActors)
