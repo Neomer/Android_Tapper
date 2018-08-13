@@ -34,7 +34,6 @@ public class Renderer extends SurfaceView
     private boolean bRun;
     private List<IActor> mActors;
     private WorldUpdater mWorldUpdater;
-    private PhysicsUpdater mPhysicsUpdater;
     private Spawner mBlockSpwaner;
     private HUD mHUD;
     private long mStartTime;
@@ -86,10 +85,16 @@ public class Renderer extends SurfaceView
         defaultMaterial.setElasticity(0);
 
         // Creating map
+        /*
         Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.map));
-        IActor mapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
+        IActor mapActor = new MapActor(
+                new Coordinate(0, 0),
+                mapStrite,
+                defaultMaterial);
+
         mapActor.ApplyImpulse(new Vector(-5, 0));
         SpawnActor(mapActor);
+        */
 
         //Creating HUD
         mHUD = new HUD(this);
@@ -110,9 +115,6 @@ public class Renderer extends SurfaceView
         mWorldUpdater = new WorldUpdater(this);
         mWorldUpdater.begin();
 
-        //mPhysicsUpdater = new PhysicsUpdater(this);
-        //mPhysicsUpdater.begin();
-
         mBlockSpwaner = new Spawner(this);
 
     }
@@ -124,16 +126,12 @@ public class Renderer extends SurfaceView
         mWorldUpdater.begin();
         mWorldUpdater.start();
 
-        //mPhysicsUpdater.begin();
-        //mPhysicsUpdater.start();
-
         mBlockSpwaner.begin();
         mBlockSpwaner.start();
     }
 
     private void StopPlay() {
         mWorldUpdater.End();
-        //mPhysicsUpdater.end();
         mBlockSpwaner.end();
 
         if (mOnGameOverLisener != null)
@@ -266,13 +264,18 @@ public class Renderer extends SurfaceView
                     canvas = mRenderer.getHolder().lockCanvas();
                     synchronized (mRenderer.getHolder())
                     {
+                        canvas.drawColor(Color.BLACK);
+
                         // Update physics
                         for (IActor actor : mActors)
                         {
                             if (!actor.IsDead())
                             {
                                 actor.UpdatePhysics(elapsedPhys);
-                                actor.getSprite().Update(elapsedPhys);
+                                if (actor.getSprite() != null)
+                                {
+                                    actor.getSprite().Update(elapsedPhys);
+                                }
 
                                 Coordinate actorCoordinate = actor.GetCoordinates();
 
@@ -352,79 +355,6 @@ public class Renderer extends SurfaceView
                     {
                         mRenderer.getHolder().unlockCanvasAndPost(canvas);
                     }
-                }
-            }
-        }
-    }
-
-    private class PhysicsUpdater extends Thread
-    {
-        private Renderer mRenderer;
-        private volatile boolean mRun = false;
-
-        private Paint mTextPaint;
-
-
-        PhysicsUpdater(Renderer renderer) {
-            mRenderer = renderer;
-            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mTextPaint.setTextSize(25);
-            mTextPaint.setARGB(255, 255,0,0);
-        }
-
-        public void begin()
-        {
-            mRun = false;
-        }
-
-        public  void end()
-        {
-            mRun = false;
-        }
-
-        @Override
-        public void run()
-        {
-            long start = System.currentTimeMillis();
-            IActor player = mRenderer.Player();
-
-            while (mRun)
-            {
-                long now = System.currentTimeMillis();
-                double elapsed = (now - start) * 0.005;
-                start = now;
-                try
-                {
-                    for (IActor actor : mActors)
-                    {
-                        if (!actor.IsDead())
-                        {
-                            actor.UpdatePhysics(elapsed);
-
-                            Coordinate actorCoordinate = actor.GetCoordinates();
-
-                            if (actorCoordinate.getX() <= 0 ||
-                                    actorCoordinate.getY() <= 0 ||
-                                    actorCoordinate.getY() >= 900)
-                            {
-                                actor.Kill();
-                                if (actor == Player())
-                                {
-                                    mRenderer.StopPlay();
-                                }
-                            }
-
-                            if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
-                            {
-                                mRenderer.Player().Kill();
-                                mRenderer.StopPlay();
-                            }
-                        }
-                    }
-                }
-                catch (Exception e) { }
-                finally
-                {
                 }
             }
         }

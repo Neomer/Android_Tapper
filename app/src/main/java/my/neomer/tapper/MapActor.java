@@ -38,38 +38,6 @@ public class MapActor extends BaseActor {
     }
 
     @Override
-    public void Draw(Canvas canvas) {
-        Coordinate coords = GetCoordinates().Clone();
-        int screenWidth = 10;
-        int dx = (int)(canvas.getWidth() / screenWidth);
-        int dy = (int)(canvas.getHeight() / mMapSizes.getY());
-
-        Paint spacePaint = new Paint();
-        spacePaint.setColor(Color.parseColor("#000000"));
-
-        Paint brickPaint = new Paint();
-        brickPaint.setColor(Color.parseColor("#ff0000"));
-
-        canvas.drawColor(Color.BLACK);
-
-        for (int x = 0; x < screenWidth; x++)
-        {
-            for (int y = 0; y < mMapSizes.getY(); y++)
-            {
-                switch (mMap[x][y])
-                {
-                    case 1:
-                        canvas.drawRect();
-                        break;
-
-                    default:
-                        continue;
-                }
-            }
-        }
-    }
-
-    @Override
     public boolean CanKill() {
         return false;
     }
