@@ -3,6 +3,7 @@ package my.neomer.tapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.util.Iterator;
 import java.util.Locale;
@@ -133,7 +134,7 @@ public class SceneRenderer extends Thread
                         }
                         else
                         {
-                            actorsIterator.remove();
+                            //actorsIterator.remove();
                         }
                     }
 
@@ -156,8 +157,12 @@ public class SceneRenderer extends Thread
                 {
                     mGameSurface.StopPlay();
                 }
+                mGameSurface.Unlock();
             }
-            catch (Exception e) { }
+            catch (Exception e) {
+                Log.d("app", Log.getStackTraceString(e));
+                return;
+            }
             finally
             {
                 if (canvas != null)

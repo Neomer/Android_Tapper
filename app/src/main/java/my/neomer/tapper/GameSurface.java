@@ -15,6 +15,7 @@ public class GameSurface extends SurfaceView
 {
     private boolean bRun;
     private List<IActor> mActors;
+    private List<IActor> mSpawnActors;
     private SceneRenderer sceneRenderer;
     private SpawnerThread spawnerThread;
     private HUD mHUD;
@@ -58,6 +59,7 @@ public class GameSurface extends SurfaceView
         mAssets = assets;
 
         mActors = new ArrayList<IActor>();
+        mSpawnActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
 
         // Load global forces
@@ -90,10 +92,7 @@ public class GameSurface extends SurfaceView
 
         // Creating world updater
         sceneRenderer = new SceneRenderer(this);
-        sceneRenderer.begin();
-
         spawnerThread = new SpawnerThread(this);
-
     }
 
     public PlayerActor getPlayer() {
@@ -150,36 +149,28 @@ public class GameSurface extends SurfaceView
         return System.currentTimeMillis() - mStartTime;
     }
 
+    public  void Unlock() {
+        for (IActor spawnActor : mSpawnActors) {
+            mActors.add(spawnActor);
+        }
+        mSpawnActors.clear();
+    }
+
+    /**
+     * Method add actor to spawn list. It will be spawn on the next call method Unlock()
+     * @param actor New actor will be spawned.
+     */
     public void SpawnActor(IActor actor)
     {
-        if (actor == null)
-        {
+        if (actor == null) {
             return;
         }
-
-        mActorsLocker.lock();
-        try {
-            mActors.add(actor);
-        }
-        finally {
-            mActorsLocker.unlock();
-        }
+        mSpawnActors.add(actor);
     }
 
     public List<IActor> getActors()
     {
         return mActors;
-        /*
-        List<IActor> result = null;
-        mActorsLocker.lock();
-        try {
-            result = mActors;
-        }
-        finally {
-            mActorsLocker.unlock();
-        }
-        return result;
-        */
     }
 
     public void setDisplayFPS(boolean mDisplayFPS) {
