@@ -62,7 +62,7 @@ public class HUD {
     }
 
     void Draw(Canvas canvas) {
-        PlayerActor player = (PlayerActor) mGameSurface.Player();
+        PlayerActor player = (PlayerActor) mGameSurface.getPlayer();
 
         //canvas.drawRect(15, 30, mBitmapEnergy.getWidth() * 10, mBitmapEnergy.getHeight() + 50, mRectPaint);
         //canvas.drawText(String.valueOf(player.getEnergy()), 10, 20, mTextPaint);
