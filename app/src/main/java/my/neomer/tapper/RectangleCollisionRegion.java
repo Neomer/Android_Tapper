@@ -54,8 +54,9 @@ public class RectangleCollisionRegion implements ICollisionRegion {
             RectangleCollisionRegion rectRegion = (RectangleCollisionRegion) collisionRegion;
             Coordinate coords1 = mPhysicsObject.GetCoordinates().Clone(),
                         coords2 = ((RectangleCollisionRegion) collisionRegion).getPhysicsObject().GetCoordinates().Clone();
-            Rect rect1 = GetMappedRect(coords1),
-                    rect2 =  collisionRegion.GetMappedRect(coords2);
+
+            Rect rect1 = getMappedRect(this, coords1),
+                    rect2 = getMappedRect(collisionRegion, coords2);
 
             return rect1.intersect(rect2);
 
@@ -70,8 +71,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         return false;
     }
 
-    @Override
-    public Rect GetMappedRect(Coordinate point) {
+    public Rect getMappedRect(ICollisionRegion collisionRegion, Coordinate point) {
         return new Rect(
                 (int)(mPhysicsObject.GetCoordinates().getX() + mLeft),
                 (int)(mPhysicsObject.GetCoordinates().getY() + mTop),
