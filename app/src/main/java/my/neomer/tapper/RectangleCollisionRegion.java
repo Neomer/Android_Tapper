@@ -1,11 +1,15 @@
 package my.neomer.tapper;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class RectangleCollisionRegion implements ICollisionRegion {
 
     private double mWidth, mHeight, mLeft, mTop;
     private IPhysicsObject mPhysicsObject;
+    private Paint mRegionPaint;
 
     RectangleCollisionRegion(IPhysicsObject owner, double width, double height) {
         mLeft = 0;
@@ -13,6 +17,10 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         mWidth = width;
         mHeight = height;
         mPhysicsObject = owner;
+
+        mRegionPaint = new Paint();
+        mRegionPaint.setColor(Color.argb(80, 127, 127, 255));
+
     }
 
     RectangleCollisionRegion(IPhysicsObject owner, double left, double top, double width, double height) {
@@ -21,8 +29,12 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         mWidth = width;
         mHeight = height;
         mPhysicsObject = owner;
+
+        mRegionPaint = new Paint();
+        mRegionPaint.setColor(Color.argb(80, 127, 127, 255));
     }
 
+    @Override
     public IPhysicsObject getPhysicsObject() {
         return mPhysicsObject;
     }
@@ -43,6 +55,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         this.mHeight = height;
     }
 
+    @Override
     public boolean checkIntersect(ICollisionRegion collisionRegion) {
         if (collisionRegion == null)
         {
@@ -71,11 +84,17 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         return false;
     }
 
-    public Rect getMappedRect(ICollisionRegion collisionRegion, Coordinate point) {
+    private Rect getMappedRect(ICollisionRegion collisionRegion, Coordinate point) {
         return new Rect(
-                (int)(mPhysicsObject.GetCoordinates().getX() + mLeft),
-                (int)(mPhysicsObject.GetCoordinates().getY() + mTop),
-                (int)(mPhysicsObject.GetCoordinates().getX() + mLeft + getWidth()),
-                (int)(mPhysicsObject.GetCoordinates().getY() + mTop + getHeight()));
+                (int)(collisionRegion.getPhysicsObject().GetCoordinates().getX() + mLeft),
+                (int)(collisionRegion.getPhysicsObject().GetCoordinates().getY() + mTop),
+                (int)(collisionRegion.getPhysicsObject().GetCoordinates().getX() + mLeft + getWidth()),
+                (int)(collisionRegion.getPhysicsObject().GetCoordinates().getY() + mTop + getHeight()));
+    }
+
+    @Override
+    public void Draw(Canvas canvas) {
+        Rect rect = getMappedRect(this, mPhysicsObject.GetCoordinates().Clone());
+        canvas.drawRect(rect, mRegionPaint);
     }
 }

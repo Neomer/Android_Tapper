@@ -31,6 +31,13 @@ public class SpawnerThread extends Thread
 
         while (mRun)
         {
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                return;
+            }
+
+
             IActor barrier = null;
             Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
 
@@ -50,11 +57,6 @@ public class SpawnerThread extends Thread
                 mGameSurface.SpawnActor(barrier);
             }
 
-            try {
-                sleep(3000);
-            } catch (InterruptedException e) {
-                return;
-            }
         }
     }
 }

@@ -38,7 +38,12 @@ public class SceneRenderer extends Thread
      * Updates physics, sprites and check collision intersections
      */
     private void updateActorStates(Canvas canvas, double timeSpan) {
+        //Log.d("app", "updateActorStates() - start");
+
         PlayerActor player = mGameSurface.getPlayer();
+        MapActor mapActor = mGameSurface.getMap();
+
+        Log.d("app", "Player coordinates " + player.GetCoordinates().toString());
 
         for (IActor actor : mGameSurface.getActors())
         {
@@ -61,8 +66,9 @@ public class SceneRenderer extends Thread
                     }
                 }
 
-                if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                if (actor != player && actor != mapActor && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                 {
+                    Log.d("app", "Collision detected!" + actor.getClass().getName());
                     if (actor.CanKill())
                     {
                         player.Kill();
@@ -79,6 +85,7 @@ public class SceneRenderer extends Thread
                 }
             }
         }
+        //Log.d("app", "updateActorStates() - end");
     }
 
     @Override
@@ -112,6 +119,7 @@ public class SceneRenderer extends Thread
                     // Update physics
                     updateActorStates(canvas, elapsedPhys);
 
+                    //Log.d("app", "draw scene - start");
                     // Draw scene
                     Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
 
@@ -123,14 +131,11 @@ public class SceneRenderer extends Thread
                         {
                             actor.Draw(canvas);
                             // Draw collision regions
-                            /*
                             ICollisionRegion collisionRegion = actor.GetCollisionRegion();
                             if (collisionRegion != null)
                             {
-                                Rect rect = collisionRegion.GetMappedRect(actor.GetCoordinates().Clone());
-                                canvas.drawRect(rect, mCollisionPainter);
+                                collisionRegion.Draw(canvas);
                             }
-                            */
                         }
                         else
                         {
@@ -138,6 +143,7 @@ public class SceneRenderer extends Thread
                         }
                     }
 
+                    //Log.d("app", "draw scene - end");
                     // Draw HUD
                     mGameSurface.getHUD().Draw(canvas);
 

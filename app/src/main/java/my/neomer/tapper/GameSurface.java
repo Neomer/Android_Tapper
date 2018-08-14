@@ -3,6 +3,7 @@ package my.neomer.tapper;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -150,10 +151,17 @@ public class GameSurface extends SurfaceView
     }
 
     public  void Unlock() {
-        for (IActor spawnActor : mSpawnActors) {
-            mActors.add(spawnActor);
+        Log.d("app", "Unlock() - start");
+
+        synchronized (mSpawnActors)
+        {
+            for (IActor spawnActor : mSpawnActors) {
+                mActors.add(spawnActor);
+            }
+            mSpawnActors.clear();
         }
-        mSpawnActors.clear();
+
+        Log.d("app", "Unlock() - end");
     }
 
     /**
@@ -165,7 +173,10 @@ public class GameSurface extends SurfaceView
         if (actor == null) {
             return;
         }
-        mSpawnActors.add(actor);
+        synchronized (mSpawnActors)
+        {
+            mSpawnActors.add(actor);
+        }
     }
 
     public List<IActor> getActors()
