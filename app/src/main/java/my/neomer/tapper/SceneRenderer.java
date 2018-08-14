@@ -44,7 +44,7 @@ public class SceneRenderer extends Thread
             if (!actor.IsDead())
             {
                 actor.UpdatePhysics(timeSpan);
-                actor.getSprite().Update(timeSpan);.
+                actor.getSprite().Update(timeSpan);
 
                 Coordinate actorCoordinate = actor.GetCoordinates();
 

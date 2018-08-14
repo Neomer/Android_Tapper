@@ -2,8 +2,6 @@ package my.neomer.tapper;
 
 public class Coordinate extends Point<Double>
 {
-    private double x, y;
-
     Coordinate() {
         super(0.0, 0.0);
     }
