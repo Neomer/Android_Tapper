@@ -33,6 +33,52 @@ public class SceneRenderer extends Thread
         mRun = false;
     }
 
+    /**
+     * Updates physics, sprites and check collision intersections
+     */
+    private void updateActorStates(Canvas canvas, double timeSpan) {
+        PlayerActor player = mGameSurface.Player();
+
+        for (IActor actor : mGameSurface.getActors())
+        {
+            if (!actor.IsDead())
+            {
+                actor.UpdatePhysics(timeSpan);
+                actor.getSprite().Update(timeSpan);.
+
+                Coordinate actorCoordinate = actor.GetCoordinates();
+
+                if (actorCoordinate.getX() <= 0 ||
+                        actorCoordinate.getY() <= 0 ||
+                        actorCoordinate.getY() >= canvas.getHeight())
+                {
+                    actor.Kill();
+                    if (actor == player)
+                    {
+                        mGameSurface.StopPlay();
+                    }
+                }
+
+                if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                {
+                    if (actor.CanKill())
+                    {
+                        player.Kill();
+                    }
+                    else
+                    {
+                        actor.Kill();
+
+                        if (actor instanceof Energy)
+                        {
+                            player.AddEnergy();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void run()
     {
@@ -62,47 +108,9 @@ public class SceneRenderer extends Thread
                 synchronized (mGameSurface.getHolder())
                 {
                     // Update physics
-                    for (IActor actor : mGameSurface.getActors())
-                    {
-                        if (!actor.IsDead())
-                        {
-                            actor.UpdatePhysics(elapsedPhys);
-                            actor.getSprite().Update(elapsedPhys);
-
-                            Coordinate actorCoordinate = actor.GetCoordinates();
-
-                            if (actorCoordinate.getX() <= 0 ||
-                                    actorCoordinate.getY() <= 0 ||
-                                    actorCoordinate.getY() >= canvas.getHeight())
-                            {
-                                actor.Kill();
-                                if (actor == player)
-                                {
-                                    mGameSurface.StopPlay();
-                                }
-                            }
-
-                            if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
-                            {
-                                if (actor.CanKill())
-                                {
-                                    player.Kill();
-                                }
-                                else
-                                {
-                                    actor.Kill();
-
-                                    if (actor instanceof Energy)
-                                    {
-                                        player.AddEnergy();
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    updateActorStates(canvas, elapsedPhys);
 
                     // Draw scene
-                    //canvas.drawColor(backgroundColor);
                     Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
 
                     while (actorsIterator.hasNext())
@@ -113,14 +121,14 @@ public class SceneRenderer extends Thread
                         {
                             actor.Draw(canvas);
                             // Draw collision regions
-                                /*
-                                ICollisionRegion collisionRegion = actor.GetCollisionRegion();
-                                if (collisionRegion != null)
-                                {
-                                    Rect rect = collisionRegion.GetMappedRect(actor.GetCoordinates().Clone());
-                                    canvas.drawRect(rect, mCollisionPainter);
-                                }
-                                */
+                            /*
+                            ICollisionRegion collisionRegion = actor.GetCollisionRegion();
+                            if (collisionRegion != null)
+                            {
+                                Rect rect = collisionRegion.GetMappedRect(actor.GetCoordinates().Clone());
+                                canvas.drawRect(rect, mCollisionPainter);
+                            }
+                            */
                         }
                         else
                         {
