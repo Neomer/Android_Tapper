@@ -34,7 +34,6 @@ public class Renderer extends SurfaceView
     private boolean bRun;
     private List<IActor> mActors;
     private SceneRenderer mWorldUpdater;
-    private PhysicsUpdater mPhysicsUpdater;
     private Spawner mBlockSpwaner;
     private HUD mHUD;
     private long mStartTime;
@@ -110,9 +109,6 @@ public class Renderer extends SurfaceView
         mWorldUpdater = new SceneRenderer(this);
         mWorldUpdater.begin();
 
-        //mPhysicsUpdater = new PhysicsUpdater(this);
-        //mPhysicsUpdater.begin();
-
         mBlockSpwaner = new Spawner(this);
 
     }
@@ -128,16 +124,12 @@ public class Renderer extends SurfaceView
         mWorldUpdater.begin();
         mWorldUpdater.start();
 
-        //mPhysicsUpdater.begin();
-        //mPhysicsUpdater.start();
-
         mBlockSpwaner.begin();
         mBlockSpwaner.start();
     }
 
     public void StopPlay() {
         mWorldUpdater.End();
-        //mPhysicsUpdater.end();
         mBlockSpwaner.end();
 
         if (mOnGameOverLisener != null)
@@ -213,136 +205,6 @@ public class Renderer extends SurfaceView
 
     public void setOnGameOverLisener(OnGameOverListener gameOverLisener) {
         this.mOnGameOverLisener = gameOverLisener;
-    }
-
-
-
-    private class PhysicsUpdater extends Thread
-    {
-        private Renderer mRenderer;
-        private volatile boolean mRun = false;
-
-        private Paint mTextPaint;
-
-
-        PhysicsUpdater(Renderer renderer) {
-            mRenderer = renderer;
-            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mTextPaint.setTextSize(25);
-            mTextPaint.setARGB(255, 255,0,0);
-        }
-
-        public void begin()
-        {
-            mRun = false;
-        }
-
-        public  void end()
-        {
-            mRun = false;
-        }
-
-        @Override
-        public void run()
-        {
-            long start = System.currentTimeMillis();
-            IActor player = mRenderer.Player();
-
-            while (mRun)
-            {
-                long now = System.currentTimeMillis();
-                double elapsed = (now - start) * 0.005;
-                start = now;
-                try
-                {
-                    for (IActor actor : mActors)
-                    {
-                        if (!actor.IsDead())
-                        {
-                            actor.UpdatePhysics(elapsed);
-
-                            Coordinate actorCoordinate = actor.GetCoordinates();
-
-                            if (actorCoordinate.getX() <= 0 ||
-                                    actorCoordinate.getY() <= 0 ||
-                                    actorCoordinate.getY() >= 900)
-                            {
-                                actor.Kill();
-                                if (actor == Player())
-                                {
-                                    mRenderer.StopPlay();
-                                }
-                            }
-
-                            if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
-                            {
-                                mRenderer.Player().Kill();
-                                mRenderer.StopPlay();
-                            }
-                        }
-                    }
-                }
-                catch (Exception e) { }
-                finally
-                {
-                }
-            }
-        }
-    }
-
-    private class Spawner extends Thread
-    {
-        Renderer mRenderer;
-        boolean mRun;
-
-
-        Spawner(Renderer renderer) {
-            mRenderer = renderer;
-            mRun = false;
-        }
-
-        public void begin()
-        {
-            mRun = true;
-        }
-
-        public  void end()
-        {
-            mRun = false;
-        }
-
-
-        @Override
-        public void run() {
-            Material defaultMaterial = new Material();
-            defaultMaterial.setElasticity(0);
-
-            while (mRun)
-            {
-                IActor barrier = null;
-                Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
-
-                if (Math.random() > 0.5) {
-                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.block));
-                    barrier = new Barrier(coordinates, sprite, defaultMaterial);
-                } else {
-                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.energy), 8);
-                    sprite.Start();
-                    sprite.setScale(0.3);
-                    sprite.setAnimationSpeed(2);
-                    barrier = new Energy(coordinates, sprite, defaultMaterial);
-                }
-                if (barrier != null)
-                {
-                    barrier.ApplyImpulse(new Vector(-50, 0));
-                    mRenderer.SpawnActor(barrier);
-                }
-
-                try {
-                    sleep(3000);
-                } catch (InterruptedException e) { }
-            }
-        }
     }
 
 }
