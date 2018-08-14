@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Renderer extends SurfaceView
+public class GameSurface extends SurfaceView
 {
     private boolean bRun;
     private List<IActor> mActors;
@@ -66,7 +66,7 @@ public class Renderer extends SurfaceView
         return mAssets;
     }
 
-    public Renderer(Context context, AssetManager assets)
+    public GameSurface(Context context, AssetManager assets)
     {
         super(context);
 

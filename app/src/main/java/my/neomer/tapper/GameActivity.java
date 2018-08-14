@@ -1,16 +1,11 @@
 package my.neomer.tapper;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class GameActivity extends BaseGameActivity {
 
-    private Renderer renderer;
+    private GameSurface gameSurface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,16 +13,16 @@ public class GameActivity extends BaseGameActivity {
 
         setupWindowSettings();
 
-        renderer = new Renderer(this, getAssets());
+        gameSurface = new GameSurface(this, getAssets());
 
-        renderer.setOnGameOverLisener(new OnGameOverListener() {
+        gameSurface.setOnGameOverLisener(new OnGameOverListener() {
             @Override
             public void OnGameOver(GameResults results) {
                 ShowResults(results);
             }
         });
 
-        setContentView(renderer);
+        setContentView(gameSurface);
     }
 
     private void ShowResults(GameResults results) {

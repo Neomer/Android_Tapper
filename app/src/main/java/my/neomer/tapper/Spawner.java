@@ -4,12 +4,12 @@ import android.graphics.BitmapFactory;
 
 public class Spawner extends Thread
 {
-    Renderer mRenderer;
+    GameSurface mGameSurface;
     boolean mRun;
 
 
-    Spawner(Renderer renderer) {
-        mRenderer = renderer;
+    Spawner(GameSurface gameSurface) {
+        mGameSurface = gameSurface;
         mRun = false;
     }
 
@@ -35,10 +35,10 @@ public class Spawner extends Thread
             Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
 
             if (Math.random() > 0.5) {
-                Sprite sprite = new Sprite(BitmapFactory.decodeResource(mRenderer.getResources(), R.drawable.block));
+                Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
                 barrier = new Barrier(coordinates, sprite, defaultMaterial);
             } else {
-                Sprite sprite = new Sprite(BitmapFactory.decodeResource(mRenderer.getResources(), R.drawable.energy), 8);
+                Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.energy), 8);
                 sprite.Start();
                 sprite.setScale(0.3);
                 sprite.setAnimationSpeed(2);
@@ -47,7 +47,7 @@ public class Spawner extends Thread
             if (barrier != null)
             {
                 barrier.ApplyImpulse(new Vector(-50, 0));
-                mRenderer.SpawnActor(barrier);
+                mGameSurface.SpawnActor(barrier);
             }
 
             try {

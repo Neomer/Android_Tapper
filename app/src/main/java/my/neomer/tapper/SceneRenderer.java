@@ -9,14 +9,14 @@ import java.util.Locale;
 public class SceneRenderer extends Thread
 {
 
-    private Renderer mRenderer;
+    private GameSurface mGameSurface;
     private volatile boolean mRun = false;
 
     private Paint mTextPaint;
 
 
-    SceneRenderer(Renderer renderer) {
-        mRenderer = renderer;
+    SceneRenderer(GameSurface gameSurface) {
+        mGameSurface = gameSurface;
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(25);
         mTextPaint.setARGB(255, 255,0,0);
@@ -42,7 +42,7 @@ public class SceneRenderer extends Thread
 
         int backgroundColor = Color.parseColor("#160B0B");
 
-        PlayerActor player = mRenderer.Player();
+        PlayerActor player = mGameSurface.Player();
 
         Canvas canvas = null;
 
@@ -57,11 +57,11 @@ public class SceneRenderer extends Thread
             try
             {
                 // подготовка Canvas-а
-                canvas = mRenderer.getHolder().lockCanvas();
-                synchronized (mRenderer.getHolder())
+                canvas = mGameSurface.getHolder().lockCanvas();
+                synchronized (mGameSurface.getHolder())
                 {
                     // Update physics
-                    for (IActor actor : mRenderer.getActors())
+                    for (IActor actor : mGameSurface.getActors())
                     {
                         if (!actor.IsDead())
                         {
@@ -77,7 +77,7 @@ public class SceneRenderer extends Thread
                                 actor.Kill();
                                 if (actor == player)
                                 {
-                                    mRenderer.StopPlay();
+                                    mGameSurface.StopPlay();
                                 }
                             }
 
@@ -102,7 +102,7 @@ public class SceneRenderer extends Thread
 
                     // Draw scene
                     //canvas.drawColor(backgroundColor);
-                    for (IActor actor : mRenderer.getActors())
+                    for (IActor actor : mGameSurface.getActors())
                     {
                         if (!actor.IsDead())
                         {
@@ -120,10 +120,10 @@ public class SceneRenderer extends Thread
                     }
 
                     // Draw HUD
-                    mRenderer.getHUD().Draw(canvas);
+                    mGameSurface.getHUD().Draw(canvas);
 
                     // Draw FPS if needed
-                    if (mRenderer.getDisplayFPS())
+                    if (mGameSurface.getDisplayFPS())
                     {
                         int y = canvas.getHeight() - 20;
                         canvas.drawText(String.format(
@@ -136,7 +136,7 @@ public class SceneRenderer extends Thread
                 }
                 if (player.IsDead())
                 {
-                    mRenderer.StopPlay();
+                    mGameSurface.StopPlay();
                 }
             }
             catch (Exception e) { }
@@ -144,7 +144,7 @@ public class SceneRenderer extends Thread
             {
                 if (canvas != null)
                 {
-                    mRenderer.getHolder().unlockCanvasAndPost(canvas);
+                    mGameSurface.getHolder().unlockCanvasAndPost(canvas);
                 }
             }
         }
