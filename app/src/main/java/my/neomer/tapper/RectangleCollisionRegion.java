@@ -66,7 +66,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         {
             RectangleCollisionRegion rectRegion = (RectangleCollisionRegion) collisionRegion;
             Coordinate coords1 = mPhysicsObject.GetCoordinates().Clone(),
-                        coords2 = ((RectangleCollisionRegion) collisionRegion).getPhysicsObject().GetCoordinates().Clone();
+                        coords2 = collisionRegion.getPhysicsObject().GetCoordinates().Clone();
 
             Rect rect1 = getMappedRect(this, coords1),
                     rect2 = getMappedRect(collisionRegion, coords2);
