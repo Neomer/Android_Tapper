@@ -33,7 +33,7 @@ public class Renderer extends SurfaceView
 {
     private boolean bRun;
     private List<IActor> mActors;
-    private WorldUpdater mWorldUpdater;
+    private SceneRenderer mWorldUpdater;
     private PhysicsUpdater mPhysicsUpdater;
     private Spawner mBlockSpwaner;
     private HUD mHUD;
@@ -107,7 +107,7 @@ public class Renderer extends SurfaceView
         SpawnActor(mPlayer);
 
         // Creating world updater
-        mWorldUpdater = new WorldUpdater(this);
+        mWorldUpdater = new SceneRenderer(this);
         mWorldUpdater.begin();
 
         //mPhysicsUpdater = new PhysicsUpdater(this);
@@ -117,7 +117,11 @@ public class Renderer extends SurfaceView
 
     }
 
-    private void BeginPlay() {
+    public HUD getHUD() {
+        return mHUD;
+    }
+
+    public void BeginPlay() {
 
         mStartTime = System.currentTimeMillis();
 
@@ -131,7 +135,7 @@ public class Renderer extends SurfaceView
         mBlockSpwaner.start();
     }
 
-    private void StopPlay() {
+    public void StopPlay() {
         mWorldUpdater.End();
         //mPhysicsUpdater.end();
         mBlockSpwaner.end();
@@ -212,150 +216,6 @@ public class Renderer extends SurfaceView
     }
 
 
-    private class WorldUpdater extends Thread
-    {
-
-        private Renderer mRenderer;
-        private volatile boolean mRun = false;
-
-        private Paint mTextPaint;
-
-
-        WorldUpdater(Renderer renderer) {
-            mRenderer = renderer;
-            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mTextPaint.setTextSize(25);
-            mTextPaint.setARGB(255, 255,0,0);
-        }
-
-        public void begin()
-        {
-            mRun = true;
-        }
-
-        public void End()
-        {
-            mRun = false;
-        }
-
-        @Override
-        public void run()
-        {
-            long start = System.currentTimeMillis();
-
-            Paint mCollisionPainter = new Paint();
-            mCollisionPainter.setARGB(50, 0,255,0);
-
-            int backgroundColor = Color.parseColor("#160B0B");
-
-            PlayerActor player = mRenderer.Player();
-
-            Canvas canvas = null;
-
-            while (mRun)
-            {
-                long now = System.currentTimeMillis();
-                double elapsed = now - start;
-                start = now;
-
-                double elapsedPhys = elapsed * 0.005;
-
-                try
-                {
-                    // подготовка Canvas-а
-                    canvas = mRenderer.getHolder().lockCanvas();
-                    synchronized (mRenderer.getHolder())
-                    {
-                        // Update physics
-                        for (IActor actor : mActors)
-                        {
-                            if (!actor.IsDead())
-                            {
-                                actor.UpdatePhysics(elapsedPhys);
-                                actor.getSprite().Update(elapsedPhys);
-
-                                Coordinate actorCoordinate = actor.GetCoordinates();
-
-                                if (actorCoordinate.getX() <= 0 ||
-                                        actorCoordinate.getY() <= 0 ||
-                                        actorCoordinate.getY() >= 900)
-                                {
-                                    actor.Kill();
-                                    if (actor == Player())
-                                    {
-                                        mRenderer.StopPlay();
-                                    }
-                                }
-
-                                if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
-                                {
-                                    if (actor.CanKill())
-                                    {
-                                        mRenderer.Player().Kill();
-                                    }
-                                    else
-                                    {
-                                        actor.Kill();
-
-                                        if (actor instanceof Energy)
-                                        {
-                                            player.AddEnergy();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // Draw scene
-                        //canvas.drawColor(backgroundColor);
-                        for (IActor actor : mActors)
-                        {
-                            if (!actor.IsDead())
-                            {
-                                actor.Draw(canvas);
-                                // Draw collision regions
-                                /*
-                                ICollisionRegion collisionRegion = actor.GetCollisionRegion();
-                                if (collisionRegion != null)
-                                {
-                                    Rect rect = collisionRegion.GetMappedRect(actor.GetCoordinates().Clone());
-                                    canvas.drawRect(rect, mCollisionPainter);
-                                }
-                                */
-                            }
-                        }
-
-                        // Draw HUD
-                        mHUD.Draw(canvas);
-
-                        // Draw FPS if needed
-                        if (mRenderer.getDisplayFPS())
-                        {
-                            int y = canvas.getHeight() - 20;
-                            canvas.drawText(String.format(
-                                    Locale.ROOT,
-                                    "FPS: %d W: %d H: %d",
-                                    Math.round(1000 / elapsed),
-                                    canvas.getWidth(),
-                                    canvas.getHeight()), 10, y, mTextPaint);
-                        }
-                    }
-                    if (player.IsDead())
-                    {
-                        mRenderer.StopPlay();
-                    }
-                }
-                catch (Exception e) { }
-                finally
-                {
-                    if (canvas != null)
-                    {
-                        mRenderer.getHolder().unlockCanvasAndPost(canvas);
-                    }
-                }
-            }
-        }
-    }
 
     private class PhysicsUpdater extends Thread
     {
