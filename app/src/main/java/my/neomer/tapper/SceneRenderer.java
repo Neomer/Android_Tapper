@@ -37,7 +37,7 @@ public class SceneRenderer extends Thread
      * Updates physics, sprites and check collision intersections
      */
     private void updateActorStates(Canvas canvas, double timeSpan) {
-        PlayerActor player = mGameSurface.Player();
+        PlayerActor player = mGameSurface.getPlayer();
 
         for (IActor actor : mGameSurface.getActors())
         {
@@ -48,9 +48,10 @@ public class SceneRenderer extends Thread
 
                 Coordinate actorCoordinate = actor.GetCoordinates();
 
-                if (actorCoordinate.getX() <= 0 ||
+                if (actor != mGameSurface.getMap() &&
+                    (actorCoordinate.getX() <= 0 ||
                         actorCoordinate.getY() <= 0 ||
-                        actorCoordinate.getY() >= canvas.getHeight())
+                        actorCoordinate.getY() >= canvas.getHeight()))
                 {
                     actor.Kill();
                     if (actor == player)
@@ -89,7 +90,7 @@ public class SceneRenderer extends Thread
 
         int backgroundColor = Color.parseColor("#160B0B");
 
-        PlayerActor player = mGameSurface.Player();
+        PlayerActor player = mGameSurface.getPlayer();
 
         Canvas canvas = null;
 

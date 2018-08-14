@@ -28,6 +28,7 @@ public class GameSurface extends SurfaceView
     private boolean mDisplayFPS;
 
     private IActor mPlayer;
+    private IActor mMapActor;
 
     private OnGameOverListener mOnGameOverLisener = null;
 
@@ -39,7 +40,7 @@ public class GameSurface extends SurfaceView
             BeginPlay();
         }
 
-        ((PlayerActor) Player()).Jump();
+        ((PlayerActor) getPlayer()).Jump();
 
         return true;
     }
@@ -68,9 +69,9 @@ public class GameSurface extends SurfaceView
 
         // Creating map
         Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.map));
-        IActor mapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
-        mapActor.ApplyImpulse(new Vector(-5, 0));
-        SpawnActor(mapActor);
+        mMapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
+        mMapActor.ApplyImpulse(new Vector(-5, 0));
+        SpawnActor(mMapActor);
 
         //Creating HUD
         mHUD = new HUD(this);
@@ -95,8 +96,16 @@ public class GameSurface extends SurfaceView
 
     }
 
+    public PlayerActor getPlayer() {
+        return (PlayerActor) mPlayer;
+    }
+
     public HUD getHUD() {
         return mHUD;
+    }
+
+    public MapActor getMap() {
+        return (MapActor) mMapActor;
     }
 
     public void BeginPlay() {
@@ -139,10 +148,6 @@ public class GameSurface extends SurfaceView
 
     public long GetGameTime() {
         return System.currentTimeMillis() - mStartTime;
-    }
-
-    public PlayerActor Player() {
-        return (PlayerActor)mPlayer;
     }
 
     public void SpawnActor(IActor actor)
