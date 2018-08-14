@@ -1,36 +1,17 @@
 package my.neomer.tapper;
 
-public class Vector {
+public class Vector extends Point<Double> {
 
-    private double x, y;
     private double mLength;
 
     Vector() {
-        x = 0;
-        y = 0;
+        super(0.0, 0.0);
         mLength = 0;
     }
 
     Vector(double x, double y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         updateLength();
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public double getLength() {
