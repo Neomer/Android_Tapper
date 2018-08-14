@@ -2,30 +2,12 @@ package my.neomer.tapper;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.media.MediaCodec;
-import android.opengl.GLSurfaceView;
-import android.os.Build;
-import android.security.ConfirmationAlreadyPresentingException;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
-import java.net.FileNameMap;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -34,7 +16,7 @@ public class GameSurface extends SurfaceView
     private boolean bRun;
     private List<IActor> mActors;
     private SceneRenderer mWorldUpdater;
-    private Spawner mBlockSpwaner;
+    private SpawnerThread mBlockSpwaner;
     private HUD mHUD;
     private long mStartTime;
     private AssetManager mAssets;
@@ -109,7 +91,7 @@ public class GameSurface extends SurfaceView
         mWorldUpdater = new SceneRenderer(this);
         mWorldUpdater.begin();
 
-        mBlockSpwaner = new Spawner(this);
+        mBlockSpwaner = new SpawnerThread(this);
 
     }
 

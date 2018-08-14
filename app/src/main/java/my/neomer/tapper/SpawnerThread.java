@@ -2,13 +2,13 @@ package my.neomer.tapper;
 
 import android.graphics.BitmapFactory;
 
-public class Spawner extends Thread
+public class SpawnerThread extends Thread
 {
     GameSurface mGameSurface;
     boolean mRun;
 
 
-    Spawner(GameSurface gameSurface) {
+    SpawnerThread(GameSurface gameSurface) {
         mGameSurface = gameSurface;
         mRun = false;
     }
