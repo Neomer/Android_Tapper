@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.Iterator;
 import java.util.Locale;
 
 public class SceneRenderer extends Thread
@@ -72,7 +73,7 @@ public class SceneRenderer extends Thread
 
                             if (actorCoordinate.getX() <= 0 ||
                                     actorCoordinate.getY() <= 0 ||
-                                    actorCoordinate.getY() >= 900)
+                                    actorCoordinate.getY() >= canvas.getHeight())
                             {
                                 actor.Kill();
                                 if (actor == player)
@@ -102,8 +103,12 @@ public class SceneRenderer extends Thread
 
                     // Draw scene
                     //canvas.drawColor(backgroundColor);
-                    for (IActor actor : mGameSurface.getActors())
+                    Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
+
+                    while (actorsIterator.hasNext())
                     {
+                        IActor actor = actorsIterator.next();
+
                         if (!actor.IsDead())
                         {
                             actor.Draw(canvas);
@@ -116,6 +121,10 @@ public class SceneRenderer extends Thread
                                     canvas.drawRect(rect, mCollisionPainter);
                                 }
                                 */
+                        }
+                        else
+                        {
+                            actorsIterator.remove();
                         }
                     }
 

@@ -15,8 +15,8 @@ public class GameSurface extends SurfaceView
 {
     private boolean bRun;
     private List<IActor> mActors;
-    private SceneRenderer mWorldUpdater;
-    private SpawnerThread mBlockSpwaner;
+    private SceneRenderer sceneRenderer;
+    private SpawnerThread spawnerThread;
     private HUD mHUD;
     private long mStartTime;
     private AssetManager mAssets;
@@ -88,10 +88,10 @@ public class GameSurface extends SurfaceView
         SpawnActor(mPlayer);
 
         // Creating world updater
-        mWorldUpdater = new SceneRenderer(this);
-        mWorldUpdater.begin();
+        sceneRenderer = new SceneRenderer(this);
+        sceneRenderer.begin();
 
-        mBlockSpwaner = new SpawnerThread(this);
+        spawnerThread = new SpawnerThread(this);
 
     }
 
@@ -103,16 +103,16 @@ public class GameSurface extends SurfaceView
 
         mStartTime = System.currentTimeMillis();
 
-        mWorldUpdater.begin();
-        mWorldUpdater.start();
+        sceneRenderer.begin();
+        sceneRenderer.start();
 
-        mBlockSpwaner.begin();
-        mBlockSpwaner.start();
+        spawnerThread.begin();
+        spawnerThread.start();
     }
 
     public void StopPlay() {
-        mWorldUpdater.End();
-        mBlockSpwaner.end();
+        sceneRenderer.End();
+        spawnerThread.end();
 
         if (mOnGameOverLisener != null)
         {
@@ -120,16 +120,16 @@ public class GameSurface extends SurfaceView
             gameResults.setTotalTime(GetGameTime());
 
             try {
-                if (mWorldUpdater.isAlive())
+                if (sceneRenderer.isAlive())
                 {
-                    mWorldUpdater.interrupt();
-                    mWorldUpdater.join();
+                    sceneRenderer.interrupt();
+                    sceneRenderer.join();
                 }
             } catch (InterruptedException e) { }
             try {
-                if (mBlockSpwaner.isAlive()) {
-                    mBlockSpwaner.interrupt();
-                    mBlockSpwaner.join();
+                if (spawnerThread.isAlive()) {
+                    spawnerThread.interrupt();
+                    spawnerThread.join();
                 }
             } catch (InterruptedException e) { }
 
