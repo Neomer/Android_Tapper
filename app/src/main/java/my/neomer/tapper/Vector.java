@@ -25,19 +25,10 @@ public class Vector extends Point<Double> {
     public void Add(Vector vector) {
         x += vector.x;
         y += vector.y;
-
-        //updateLength();
     }
 
-    public void Multiply(double value) {
-        x *= value;
-        y *= value;
-
-        //updateLength();
-    }
-
-    public void Reflects(Vector normal) {
-        
+    public Vector Multiply(double value) {
+        return new Vector(x * value, y * value);
     }
 
     public Vector Clone() {
@@ -46,6 +37,11 @@ public class Vector extends Point<Double> {
 
     public String toString() {
         return String.format("(%f;%f)", x, y);
+    }
+
+    public void Clear() {
+        x = 0.0;
+        y = 0.0;
     }
 
 }

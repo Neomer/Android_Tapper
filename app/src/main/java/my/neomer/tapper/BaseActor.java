@@ -21,6 +21,7 @@ abstract class BaseActor implements IActor {
     private Vector mVelocity;
     private Sprite mSprite;
     private List<Vector> mForces;
+    private Vector resultForce;
     private Paint fontPaint;
     private Material mMaterial;
 
@@ -33,6 +34,7 @@ abstract class BaseActor implements IActor {
 
         mVelocity = new Vector();
         mForces = new ArrayList<Vector>();
+        resultForce = new Vector();
         mMaterial = material;
 
         fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -77,6 +79,11 @@ abstract class BaseActor implements IActor {
     public void ApplyForce(Vector force)
     {
         mForces.add(force);
+
+        resultForce.Clear();
+        for (Vector v : mForces) {
+            resultForce.Add(v);
+        }
     }
 
     @Override
@@ -91,27 +98,13 @@ abstract class BaseActor implements IActor {
             return;
         }
 
-        updateVelocity(timeSpan);
-
-        Vector v = mVelocity.Clone();
-        v.Multiply(timeSpan);
-        mPosition.Add(v);
+        mVelocity.Add(resultForce.Multiply(timeSpan));
+        mPosition.Add(mVelocity.Multiply(timeSpan));
     }
 
     @Override
     public void SetMaterial(Material material) {
         mMaterial = material;
-    }
-
-    private void updateVelocity(double timeSpan)
-    {
-        // Calculate result force
-        Vector resultForce = new Vector();
-        for (Vector v : mForces) {
-            resultForce.Add(v);
-        }
-        resultForce.Multiply(timeSpan);
-        mVelocity.Add(resultForce);
     }
 
     public Vector getVelocity() {
