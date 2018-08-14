@@ -9,7 +9,7 @@ public interface IPhysicsObject {
     void ApplyForce(Vector force);
     void ApplyImpulse(Vector impulse);
 
-    void UpdatePhysics(double timeSpan);
+    void Update(double timeSpan);
 
     boolean IsStatic();
 

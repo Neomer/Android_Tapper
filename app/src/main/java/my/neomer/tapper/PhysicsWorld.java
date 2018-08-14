@@ -18,7 +18,7 @@ public class PhysicsWorld implements IPhysicsObject
     }
 
     @Override
-    public void UpdatePhysics(double timeSpan)
+    public void Update(double timeSpan)
     {
 
     }

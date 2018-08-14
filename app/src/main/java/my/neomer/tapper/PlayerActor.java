@@ -1,12 +1,5 @@
 package my.neomer.tapper;
 
-import android.app.PendingIntent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-
-import java.lang.invoke.ConstantCallSite;
-
 class PlayerActor extends BaseActor implements IControllable
 {
     public static final double MAX_ENERGY  = 100; // Energy limit
@@ -34,8 +27,8 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
-    public void UpdatePhysics(double timeSpan) {
-        super.UpdatePhysics(timeSpan);
+    public void Update(double timeSpan) {
+        super.Update(timeSpan);
 
         mEnergy -= timeSpan;
     }

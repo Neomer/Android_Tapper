@@ -93,7 +93,7 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
-    public void UpdatePhysics(double timeSpan) {
+    public void Update(double timeSpan) {
         if (IsStatic() || IsDead()) {
             return;
         }
