@@ -12,13 +12,13 @@ public class Sprite
     private int mStatesCount;
     private double mCurrentState;
     private double mAnimationSpeed;
-    private Coordinate mMask;
+    private Point<Integer> mMask;
     private double mScale;
     private int mDirection;
     private boolean mAnimation;
 
 
-    Sprite(Bitmap bitmap, Coordinate mask, int statesCount) {
+    Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
         mMask = mask;
@@ -32,7 +32,7 @@ public class Sprite
     Sprite(Bitmap bitmap, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
-        mMask = new Coordinate(bitmap.getWidth() / statesCount, bitmap.getHeight());
+        mMask = new Point<Integer>(bitmap.getWidth() / statesCount, bitmap.getHeight());
         mAnimationSpeed = 1;
         mCurrentState = 0;
         mScale = 1;
@@ -43,7 +43,7 @@ public class Sprite
     public Sprite(Bitmap bitmap) {
         mBitmap = bitmap;
         mStatesCount = 1;
-        mMask = new Coordinate(bitmap.getWidth(), bitmap.getHeight());
+        mMask = new Point<Integer>(bitmap.getWidth(), bitmap.getHeight());
         mAnimationSpeed = 1;
         mCurrentState = 0;
         mScale = 1;
@@ -76,7 +76,7 @@ public class Sprite
 
     Rect GetCurrentMask() {
         int dx = (int)mCurrentState;
-        return new Rect((int)(dx * mMask.getX()), 0, (int)((dx + 1) * mMask.getX()), (int)mMask.getY());
+        return new Rect((int)(dx * mMask.getX()), 0, (dx + 1) * mMask.getX(), mMask.getY());
     }
 
     Bitmap GetBitmap() {

@@ -1,7 +1,7 @@
 package my.neomer.tapper;
 
 public class Point<T> {
-    T x, y;
+    protected T x, y;
 
     Point(T x, T y) {
         this.x = x;

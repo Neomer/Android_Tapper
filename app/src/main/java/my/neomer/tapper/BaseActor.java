@@ -63,8 +63,8 @@ abstract class BaseActor implements IActor {
         //canvas.drawText(String.format("Velocity: %s", mVelocity.toString()), 10, 20, fontPaint);
         //canvas.drawText(String.format("Position: %s", mPosition.toString()), 10, 40, fontPaint);
         Rect dstRect = new Rect(
-                (int) mPosition.getX(),
-                (int) mPosition.getY(),
+                (int) Math.round(mPosition.getX()),
+                (int) Math.round(mPosition.getY()),
                 (int) (mPosition.getX() + mSprite.GetWidth()),
                 (int) (mPosition.getY() + mSprite.GetHeight())),
             srcRect = mSprite.GetCurrentMask();
