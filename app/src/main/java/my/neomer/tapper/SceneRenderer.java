@@ -43,7 +43,13 @@ public class SceneRenderer extends Thread
         PlayerActor player = mGameSurface.getPlayer();
         MapActor mapActor = mGameSurface.getMap();
 
-        Log.d("app", "Player coordinates " + player.GetCoordinates().toString());
+        if (player == player &&
+                player.GetCoordinates().getY() <= 0 ||
+                player.GetCoordinates().getY() >= canvas.getHeight())
+        {
+            player.Kill();
+            mGameSurface.StopPlay();
+        }
 
         for (IActor actor : mGameSurface.getActors())
         {
@@ -54,21 +60,12 @@ public class SceneRenderer extends Thread
 
                 Coordinate actorCoordinate = actor.GetCoordinates();
 
-                if (actor != mGameSurface.getMap() &&
-                    (actorCoordinate.getX() <= 0 ||
-                        actorCoordinate.getY() <= 0 ||
-                        actorCoordinate.getY() >= canvas.getHeight()))
-                {
+                if (actorCoordinate.getX() + actor.getSprite().GetWidth() <= 0) {
                     actor.Kill();
-                    if (actor == player)
-                    {
-                        mGameSurface.StopPlay();
-                    }
                 }
 
                 if (actor != player && actor != mapActor && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                 {
-                    Log.d("app", "Collision detected!" + actor.getClass().getName());
                     if (actor.CanKill())
                     {
                         player.Kill();
@@ -85,7 +82,6 @@ public class SceneRenderer extends Thread
                 }
             }
         }
-        //Log.d("app", "updateActorStates() - end");
     }
 
     @Override
@@ -127,7 +123,7 @@ public class SceneRenderer extends Thread
                     {
                         IActor actor = actorsIterator.next();
 
-                        if (!actor.IsDead())
+                        if (!actor.IsDead() && actor.IsVisible(canvas))
                         {
                             actor.Draw(canvas);
                             // Draw collision regions

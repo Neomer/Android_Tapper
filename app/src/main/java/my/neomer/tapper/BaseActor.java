@@ -24,8 +24,22 @@ abstract class BaseActor implements IActor {
     private Vector resultForce;
     private Paint fontPaint;
     private Material mMaterial;
+    private ICollisionRegion mCollisionRegion;
+
+    @Override
+    public final ICollisionRegion GetCollisionRegion() {
+        return mCollisionRegion;
+    }
 
     private boolean mDead;
+
+    @Override
+    public boolean IsVisible(Canvas canvas) {
+        return GetCoordinates().getY() >= 0 &&
+                GetCoordinates().getY() - getSprite().GetHeight() < canvas.getHeight() &&
+                GetCoordinates().getX() + getSprite().GetWidth() >= 0 &&
+                GetCoordinates().getX() < canvas.getWidth();
+    }
 
     BaseActor(Coordinate position, Sprite sprite, Material material)
     {
@@ -42,6 +56,7 @@ abstract class BaseActor implements IActor {
         fontPaint.setARGB(255, 255, 0, 0);
 
         mDead = false;
+        mCollisionRegion = new BaseCollisionRegion();
     }
 
     @Override
