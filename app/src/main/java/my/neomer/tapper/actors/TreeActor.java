@@ -17,7 +17,7 @@ public class TreeActor extends BaseActor {
                 this, new Coordinate(90.0, 270.0), 70.0
         ));
         GetCollisionRegion().AddCollisionElement(new CircleCollisionElement(
-                this, new Coordinate(190, 110), 110
+                this, new Coordinate(180, 120), 100
         ));
         GetCollisionRegion().AddCollisionElement(new CircleCollisionElement(
                 this, new Coordinate(sprite.GetWidth() - 90, 330), 60

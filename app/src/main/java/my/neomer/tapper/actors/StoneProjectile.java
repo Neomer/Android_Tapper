@@ -1,5 +1,6 @@
 package my.neomer.tapper.actors;
 
+import my.neomer.tapper.CircleCollisionElement;
 import my.neomer.tapper.Coordinate;
 import my.neomer.tapper.Material;
 import my.neomer.tapper.RectangleCollisionElement;
@@ -12,7 +13,10 @@ public class StoneProjectile extends BaseProjectileActor {
         super(position, sprite, material);
 
         GetCollisionRegion().AddCollisionElement(
-                new RectangleCollisionElement(this, sprite.GetWidth(), sprite.GetHeight())
+                new CircleCollisionElement(
+                        this,
+                        new Coordinate(sprite.GetWidth() * 0.5, sprite.GetHeight() * 0.5),
+                        50)
         );
 
         ApplyImpulse(new Vector(-30 - Math.random() * 30, -70 - Math.random() * 30));
