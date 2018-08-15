@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import my.neomer.tapper.actors.Barrier;
 import my.neomer.tapper.actors.Energy;
 import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.StoneProjectile;
 
 public class SpawnerThread extends Thread
 {
@@ -42,23 +43,34 @@ public class SpawnerThread extends Thread
             }
 
 
-            IActor barrier = null;
+            IActor actor = null;
             Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
 
-            if (Math.random() > 0.5) {
-                Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
-                barrier = new Barrier(coordinates, sprite, defaultMaterial);
+            double random = Math.random();
+            if (random > 0.5) {
+                if (random >= 0.75)
+                {
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
+                    actor = new Barrier(coordinates, sprite, defaultMaterial);
+                }
+                else
+                {
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.stone_bullet));
+                    sprite.setScale(0.1);
+                    actor = new StoneProjectile(coordinates, sprite, defaultMaterial);
+                    actor.ApplyForce(mGameSurface.getGravity());
+                }
             } else {
                 Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.energy), 8);
                 sprite.Start();
                 sprite.setScale(0.3);
                 sprite.setAnimationSpeed(2);
-                barrier = new Energy(coordinates, sprite, defaultMaterial);
+                actor = new Energy(coordinates, sprite, defaultMaterial);
             }
-            if (barrier != null)
+            if (actor != null)
             {
-                barrier.ApplyImpulse(new Vector(-50, 0));
-                mGameSurface.SpawnActor(barrier);
+                actor.ApplyImpulse(new Vector(-50, 0));
+                mGameSurface.SpawnActor(actor);
             }
 
         }

@@ -110,6 +110,10 @@ public class GameSurface extends SurfaceView
         return (MapActor) mMapActor;
     }
 
+    public GravityForce getGravity() {
+        return mGravity;
+    }
+
     public void BeginPlay() {
 
         mStartTime = System.currentTimeMillis();
