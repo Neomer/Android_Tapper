@@ -49,9 +49,7 @@ public class SceneRenderer extends Thread
         PlayerActor player = mGameSurface.getPlayer();
         MapActor mapActor = mGameSurface.getMap();
 
-        if (player == player &&
-                player.GetCoordinates().getY() <= 0 ||
-                player.GetCoordinates().getY() >= canvas.getHeight())
+        if (player.GetCoordinates().getY() >= canvas.getHeight())
         {
             player.Kill();
             mGameSurface.StopPlay();
@@ -70,7 +68,7 @@ public class SceneRenderer extends Thread
                     actor.Kill();
                 }
 
-                if (actor != player && actor != mapActor && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                if (actor != player && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                 {
                     if (actor.CanKill())
                     {

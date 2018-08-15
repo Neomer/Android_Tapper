@@ -32,7 +32,7 @@ public class PlayerActor extends BaseActor implements IControllable
     public void Update(double timeSpan) {
         super.Update(timeSpan);
 
-        mEnergy -= timeSpan;
+        mEnergy -= timeSpan * 0.9;
     }
 
     @Override

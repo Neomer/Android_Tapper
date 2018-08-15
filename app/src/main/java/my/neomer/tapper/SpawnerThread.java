@@ -37,7 +37,7 @@ public class SpawnerThread extends Thread
         while (mRun)
         {
             try {
-                sleep(3000);
+                sleep(2000);
             } catch (InterruptedException e) {
                 return;
             }
