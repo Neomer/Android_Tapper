@@ -148,11 +148,13 @@ public class SceneRenderer extends Thread
                         {
                             actor.Draw(canvas);
                             // Draw collision regions
+                            /*
                             ICollisionRegion collisionRegion = actor.GetCollisionRegion();
                             if (collisionRegion != null)
                             {
                                 collisionRegion.Draw(canvas);
                             }
+                            */
                         }
                         else
                         {
