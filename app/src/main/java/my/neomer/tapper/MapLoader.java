@@ -2,6 +2,9 @@ package my.neomer.tapper;
 
 import android.graphics.BitmapFactory;
 
+import my.neomer.tapper.actors.GroundBlock;
+import my.neomer.tapper.actors.IActor;
+
 public class MapLoader {
 
     static void LoadMapFromFile(GameSurface gameSurface, String filename) {
@@ -9,7 +12,7 @@ public class MapLoader {
         sprite.setScale(0.4);
         double dx = sprite.GetWidth();
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 1000; i++) {
             IActor groundBlock = new GroundBlock(new Coordinate(i * dx - i, 0), sprite, new Material());
             gameSurface.SpawnActor(groundBlock);
         }

@@ -3,7 +3,6 @@ package my.neomer.tapper;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -11,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.MapActor;
+import my.neomer.tapper.actors.PlayerActor;
 
 public class GameSurface extends SurfaceView
 {

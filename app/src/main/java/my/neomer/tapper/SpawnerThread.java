@@ -2,6 +2,10 @@ package my.neomer.tapper;
 
 import android.graphics.BitmapFactory;
 
+import my.neomer.tapper.actors.Barrier;
+import my.neomer.tapper.actors.Energy;
+import my.neomer.tapper.actors.IActor;
+
 public class SpawnerThread extends Thread
 {
     GameSurface mGameSurface;

@@ -9,6 +9,11 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.Locale;
 
+import my.neomer.tapper.actors.Energy;
+import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.MapActor;
+import my.neomer.tapper.actors.PlayerActor;
+
 public class SceneRenderer extends Thread
 {
 

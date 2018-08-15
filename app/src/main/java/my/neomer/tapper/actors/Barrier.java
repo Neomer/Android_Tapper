@@ -1,8 +1,13 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
+
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.RectangleCollisionElement;
+import my.neomer.tapper.Sprite;
 
 public class Barrier extends BaseActor {
 
-    Barrier(Coordinate position, Sprite sprite, Material material) {
+    public Barrier(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
         GetCollisionRegion().AddCollisionElement(

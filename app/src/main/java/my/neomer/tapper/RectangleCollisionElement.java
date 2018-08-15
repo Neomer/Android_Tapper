@@ -11,7 +11,7 @@ public class RectangleCollisionElement implements ICollisionElement {
     private IPhysicsObject mPhysicsObject;
     private Paint mRegionPaint;
 
-    RectangleCollisionElement(IPhysicsObject owner, double width, double height) {
+    public RectangleCollisionElement(IPhysicsObject owner, double width, double height) {
         mLeft = 0;
         mTop = 0;
         mWidth = width;
@@ -23,7 +23,7 @@ public class RectangleCollisionElement implements ICollisionElement {
 
     }
 
-    RectangleCollisionElement(IPhysicsObject owner, double left, double top, double width, double height) {
+    public RectangleCollisionElement(IPhysicsObject owner, double left, double top, double width, double height) {
         mLeft = left;
         mTop = top;
         mWidth = width;

@@ -7,6 +7,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import my.neomer.tapper.actors.PlayerActor;
+
 public class HUD {
 
     private GameSurface mGameSurface;

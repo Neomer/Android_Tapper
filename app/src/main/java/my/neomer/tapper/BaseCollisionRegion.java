@@ -9,7 +9,7 @@ public class BaseCollisionRegion implements ICollisionRegion {
 
     private List<ICollisionElement> collisionElements;
 
-    BaseCollisionRegion() {
+    public BaseCollisionRegion() {
         collisionElements = new ArrayList<ICollisionElement>();
     }
 
