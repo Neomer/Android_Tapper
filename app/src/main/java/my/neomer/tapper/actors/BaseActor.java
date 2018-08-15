@@ -1,4 +1,4 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +16,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import my.neomer.tapper.BaseCollisionRegion;
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.ICollisionRegion;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.Sprite;
+import my.neomer.tapper.Vector;
+
 abstract class BaseActor implements IActor {
     private Coordinate mPosition;
     private Vector mVelocity;
@@ -24,10 +31,24 @@ abstract class BaseActor implements IActor {
     private Vector resultForce;
     private Paint fontPaint;
     private Material mMaterial;
+    private ICollisionRegion mCollisionRegion;
+
+    @Override
+    public final ICollisionRegion GetCollisionRegion() {
+        return mCollisionRegion;
+    }
 
     private boolean mDead;
 
-    BaseActor(Coordinate position, Sprite sprite, Material material)
+    @Override
+    public boolean IsVisible(Canvas canvas) {
+        return GetCoordinates().getY() + getSprite().GetHeight() >= 0 &&
+                GetCoordinates().getY() - getSprite().GetHeight() < canvas.getHeight() &&
+                GetCoordinates().getX() + getSprite().GetWidth() >= 0 &&
+                GetCoordinates().getX() < canvas.getWidth();
+    }
+
+    public BaseActor(Coordinate position, Sprite sprite, Material material)
     {
         mSprite = sprite;
         mPosition = position;
@@ -42,6 +63,12 @@ abstract class BaseActor implements IActor {
         fontPaint.setARGB(255, 255, 0, 0);
 
         mDead = false;
+        mCollisionRegion = new BaseCollisionRegion();
+    }
+
+    @Override
+    public double GetMass() {
+        return 1;
     }
 
     @Override
@@ -87,9 +114,8 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
-    public void ApplyImpulse(Vector impulse)
-    {
-        mVelocity.Add(impulse);
+    public void ApplyImpulse(Vector impulse) {
+        mVelocity.Add(impulse.Multiply(1 / GetMass()));
     }
 
     @Override

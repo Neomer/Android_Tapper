@@ -1,18 +1,25 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
 
-class PlayerActor extends BaseActor implements IControllable
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.IControllable;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.RectangleCollisionElement;
+import my.neomer.tapper.Sprite;
+import my.neomer.tapper.Vector;
+
+public class PlayerActor extends BaseActor implements IControllable
 {
     public static final double MAX_ENERGY  = 100; // Energy limit
     private static final int ENERGY_BOOST = 25;   // Energy value increase
 
-    private ICollisionRegion mCollisionRegion;
     private double mEnergy;
 
 
-    PlayerActor(Coordinate position, Sprite sprite, Material material) {
+    public PlayerActor(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(this, 0, 20, sprite.GetWidth(), sprite.GetHeight() - 40);
+        GetCollisionRegion().AddCollisionElement(
+                new RectangleCollisionElement(this, 0, 20, sprite.GetWidth(), sprite.GetHeight() - 40));
         mEnergy = PlayerActor.MAX_ENERGY;
     }
 
@@ -22,15 +29,10 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
-    public ICollisionRegion GetCollisionRegion() {
-        return mCollisionRegion;
-    }
-
-    @Override
     public void Update(double timeSpan) {
         super.Update(timeSpan);
 
-        mEnergy -= timeSpan;
+        mEnergy -= timeSpan * 0.9;
     }
 
     @Override
@@ -39,10 +41,15 @@ class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
+    public double GetMass() {
+        return 2;
+    }
+
+    @Override
     public void Jump() {
         if (mEnergy > 0)
         {
-            ApplyImpulse(new Vector(0, -10));
+            ApplyImpulse(new Vector(0, -50));
         }
     }
 

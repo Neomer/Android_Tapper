@@ -3,7 +3,6 @@ package my.neomer.tapper;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -11,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.MapActor;
+import my.neomer.tapper.actors.PlayerActor;
 
 public class GameSurface extends SurfaceView
 {
@@ -42,7 +45,11 @@ public class GameSurface extends SurfaceView
             BeginPlay();
         }
 
-        ((PlayerActor) getPlayer()).Jump();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                getPlayer().Jump();
+            break;
+        }
 
         return true;
     }
@@ -63,6 +70,8 @@ public class GameSurface extends SurfaceView
         mSpawnActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
 
+        mDisplayFPS = true;
+
         // Load global forces
         mGravity = new GravityForce();
 
@@ -71,10 +80,7 @@ public class GameSurface extends SurfaceView
         defaultMaterial.setElasticity(0);
 
         // Creating map
-        Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.map));
-        mMapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
-        mMapActor.ApplyImpulse(new Vector(-5, 0));
-        SpawnActor(mMapActor);
+        MapLoader.LoadMapFromFile(this, null);
 
         //Creating HUD
         mHUD = new HUD(this);
@@ -106,6 +112,10 @@ public class GameSurface extends SurfaceView
 
     public MapActor getMap() {
         return (MapActor) mMapActor;
+    }
+
+    public GravityForce getGravity() {
+        return mGravity;
     }
 
     public void BeginPlay() {
@@ -151,7 +161,6 @@ public class GameSurface extends SurfaceView
     }
 
     public  void Unlock() {
-        Log.d("app", "Unlock() - start");
 
         synchronized (mSpawnActors)
         {
@@ -161,7 +170,6 @@ public class GameSurface extends SurfaceView
             mSpawnActors.clear();
         }
 
-        Log.d("app", "Unlock() - end");
     }
 
     /**

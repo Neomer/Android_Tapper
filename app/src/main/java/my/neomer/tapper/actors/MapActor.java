@@ -1,8 +1,12 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
+
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.Sprite;
 
 public class MapActor extends BaseActor {
 
-    MapActor(Coordinate position, Sprite sprite, Material material) {
+    public MapActor(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
     }
@@ -15,11 +19,6 @@ public class MapActor extends BaseActor {
     @Override
     public boolean IsStatic() {
         return false;
-    }
-
-    @Override
-    public ICollisionRegion GetCollisionRegion() {
-        return null;
     }
 
     @Override

@@ -1,12 +1,21 @@
 package my.neomer.tapper;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import java.util.Iterator;
 import java.util.Locale;
+
+import my.neomer.tapper.actors.Energy;
+import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.MapActor;
+import my.neomer.tapper.actors.PlayerActor;
 
 public class SceneRenderer extends Thread
 {
@@ -15,6 +24,7 @@ public class SceneRenderer extends Thread
     private volatile boolean mRun = false;
 
     private Paint mTextPaint;
+    private Bitmap backBitmap;
 
 
     SceneRenderer(GameSurface gameSurface) {
@@ -22,6 +32,7 @@ public class SceneRenderer extends Thread
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(25);
         mTextPaint.setARGB(255, 255,0,0);
+        backBitmap = BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.back);
     }
 
     public void begin()
@@ -43,7 +54,11 @@ public class SceneRenderer extends Thread
         PlayerActor player = mGameSurface.getPlayer();
         MapActor mapActor = mGameSurface.getMap();
 
-        Log.d("app", "Player coordinates " + player.GetCoordinates().toString());
+        if (player.GetCoordinates().getY() >= canvas.getHeight())
+        {
+            player.Kill();
+            mGameSurface.StopPlay();
+        }
 
         for (IActor actor : mGameSurface.getActors())
         {
@@ -54,21 +69,17 @@ public class SceneRenderer extends Thread
 
                 Coordinate actorCoordinate = actor.GetCoordinates();
 
-                if (actor != mGameSurface.getMap() &&
-                    (actorCoordinate.getX() <= 0 ||
-                        actorCoordinate.getY() <= 0 ||
-                        actorCoordinate.getY() >= canvas.getHeight()))
-                {
+                if (actorCoordinate.getX() + actor.getSprite().GetWidth() <= 0) {
                     actor.Kill();
-                    if (actor == player)
-                    {
-                        mGameSurface.StopPlay();
-                    }
                 }
 
-                if (actor != player && actor != mapActor && actor.GetCollisionRegion() != null && actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                if (actor != player &&
+                        actor.GetCollisionRegion() != null &&
+                        actor.GetCollisionRegion().hasElements() &&
+                        actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                 {
-                    Log.d("app", "Collision detected!" + actor.getClass().getName());
+                    actor.GetCollisionRegion().Draw(canvas);
+
                     if (actor.CanKill())
                     {
                         player.Kill();
@@ -85,7 +96,6 @@ public class SceneRenderer extends Thread
                 }
             }
         }
-        //Log.d("app", "updateActorStates() - end");
     }
 
     @Override
@@ -119,23 +129,32 @@ public class SceneRenderer extends Thread
                     // Update physics
                     updateActorStates(canvas, elapsedPhys);
 
-                    //Log.d("app", "draw scene - start");
                     // Draw scene
+                    /*
+                    Rect srcRect = new Rect(0, 0, backBitmap.getWidth(), backBitmap.getHeight()),
+                        dstRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                    canvas.drawBitmap(backBitmap,srcRect ,dstRect, null);
+                    */
+                    canvas.drawColor(ResourcesCompat.getColor(mGameSurface.getResources(), R.color.BackgroundSky, null));
+
                     Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
 
                     while (actorsIterator.hasNext())
                     {
                         IActor actor = actorsIterator.next();
 
-                        if (!actor.IsDead())
+                        if (!actor.IsDead() && actor.IsVisible(canvas))
                         {
                             actor.Draw(canvas);
                             // Draw collision regions
+                            /*
                             ICollisionRegion collisionRegion = actor.GetCollisionRegion();
                             if (collisionRegion != null)
                             {
                                 collisionRegion.Draw(canvas);
                             }
+                            */
                         }
                         else
                         {
@@ -143,7 +162,6 @@ public class SceneRenderer extends Thread
                         }
                     }
 
-                    //Log.d("app", "draw scene - end");
                     // Draw HUD
                     mGameSurface.getHUD().Draw(canvas);
 

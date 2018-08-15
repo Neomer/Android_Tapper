@@ -4,12 +4,12 @@ public class Vector extends Point<Double> {
 
     private double mLength;
 
-    Vector() {
+    public Vector() {
         super(0.0, 0.0);
         mLength = 0;
     }
 
-    Vector(double x, double y) {
+    public Vector(double x, double y) {
         super(x, y);
         updateLength();
     }

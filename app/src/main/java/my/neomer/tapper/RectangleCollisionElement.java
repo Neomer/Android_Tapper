@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class RectangleCollisionRegion implements ICollisionRegion {
+public class RectangleCollisionElement implements ICollisionElement {
 
     private double mWidth, mHeight, mLeft, mTop;
     private IPhysicsObject mPhysicsObject;
     private Paint mRegionPaint;
 
-    RectangleCollisionRegion(IPhysicsObject owner, double width, double height) {
+    public RectangleCollisionElement(IPhysicsObject owner, double width, double height) {
         mLeft = 0;
         mTop = 0;
         mWidth = width;
@@ -23,7 +23,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
 
     }
 
-    RectangleCollisionRegion(IPhysicsObject owner, double left, double top, double width, double height) {
+    public RectangleCollisionElement(IPhysicsObject owner, double left, double top, double width, double height) {
         mLeft = left;
         mTop = top;
         mWidth = width;
@@ -55,41 +55,35 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         this.mHeight = height;
     }
 
+    public double getLeft() { return mLeft; }
+
+    public  double getTop() { return  mTop; }
+
     @Override
-    public boolean checkIntersect(ICollisionRegion collisionRegion) {
+    public boolean checkIntersect(ICollisionElement collisionRegion) {
         if (collisionRegion == null)
         {
             return false;
         }
 
-        if (collisionRegion instanceof RectangleCollisionRegion)
+        if (collisionRegion instanceof RectangleCollisionElement)
         {
-            RectangleCollisionRegion rectRegion = (RectangleCollisionRegion) collisionRegion;
-            Coordinate coords1 = mPhysicsObject.GetCoordinates().Clone(),
-                        coords2 = collisionRegion.getPhysicsObject().GetCoordinates().Clone();
-
-            Rect rect1 = getMappedRect(this, coords1),
-                    rect2 = getMappedRect((RectangleCollisionRegion) collisionRegion, coords2);
-
-            return rect1.intersect(rect2);
-
-            /* manual algorithm
-            return rect1.left <= rect2.right &&
-                    rect1.right >= rect2.left &&
-                    rect1.bottom <= rect2.top &&
-                    rect1.top >= rect2.bottom;
-            */
+            return CollisionSolver.CheckRectToRectIntersection(this, (RectangleCollisionElement) collisionRegion);
+        }
+        else if (collisionRegion instanceof CircleCollisionElement)
+        {
+            return CollisionSolver.CheckRectToCircleIntersection(this, (CircleCollisionElement) collisionRegion);
         }
 
         return false;
     }
 
-    private Rect getMappedRect(RectangleCollisionRegion collisionRegion, Coordinate point) {
+    public static Rect getMappedRect(RectangleCollisionElement collisionRegion, Coordinate point) {
         return new Rect(
-                (int)(point.getX() + mLeft),
-                (int)(point.getY() + mTop),
-                (int)(point.getX() + mLeft + collisionRegion.getWidth()),
-                (int)(point.getY() + mTop + collisionRegion.getHeight()));
+                (int)(point.getX() + collisionRegion.getLeft()),
+                (int)(point.getY() + collisionRegion.getTop()),
+                (int)(point.getX() + collisionRegion.getLeft() + collisionRegion.getWidth()),
+                (int)(point.getY() + collisionRegion.getTop() + collisionRegion.getHeight()));
     }
 
     @Override

@@ -16,9 +16,9 @@ public class Sprite
     private double mScale;
     private int mDirection;
     private boolean mAnimation;
+    private SpriteAnimationType mSpriteAnimationType;
 
-
-    Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
+    public Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
         mMask = mask;
@@ -27,9 +27,10 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
-    Sprite(Bitmap bitmap, int statesCount) {
+    public Sprite(Bitmap bitmap, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
         mMask = new Point<Integer>(bitmap.getWidth() / statesCount, bitmap.getHeight());
@@ -38,6 +39,7 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
     public Sprite(Bitmap bitmap) {
@@ -49,45 +51,70 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
-    void Start() {
+    public void Start() {
         mAnimation = true;
     }
 
-    void Stop() {
+    public void Stop() {
         mAnimation = false;
     }
 
-    void Update(double timeSpan) {
+    public enum SpriteAnimationType
+    {
+        // При достижении конца меняется направление движения кадров
+        Reverse,
+        // При достижении конца движение начинается с 1го кадра
+        Circle
+    }
+
+    public void setAnimationType(SpriteAnimationType animationType) {
+        mSpriteAnimationType = animationType;
+    }
+
+
+    public void Update(double timeSpan) {
         if (mAnimation) {
             mCurrentState += (timeSpan * mAnimationSpeed * mDirection);
-            if (mStatesCount - mCurrentState <= 0) {
-                mCurrentState = mStatesCount - 1;
-                mDirection = -1;
-            }
+            switch (mSpriteAnimationType)
+            {
+                case Circle:
+                    if (mStatesCount - mCurrentState <= 0) {
+                        mCurrentState = timeSpan * mAnimationSpeed;
+                    }
+                    break;
 
-            if (mCurrentState <= 0) {
-                mCurrentState = timeSpan * mAnimationSpeed;
-                mDirection = 1;
+                case Reverse:
+                    if (mStatesCount - mCurrentState <= 0) {
+                        mCurrentState = mStatesCount - 1;
+                        mDirection = -1;
+                    }
+
+                    if (mCurrentState <= 0) {
+                        mCurrentState = timeSpan * mAnimationSpeed;
+                        mDirection = 1;
+                    }
+                    break;
             }
         }
     }
 
-    Rect GetCurrentMask() {
+    public Rect GetCurrentMask() {
         int dx = (int)mCurrentState;
         return new Rect((int)(dx * mMask.getX()), 0, (dx + 1) * mMask.getX(), mMask.getY());
     }
 
-    Bitmap GetBitmap() {
+    public Bitmap GetBitmap() {
         return mBitmap;
     }
 
-    double GetWidth() {
+    public double GetWidth() {
         return mMask.getX() * mScale;
     }
 
-    double GetHeight() {
+    public double GetHeight() {
         return mMask.getY() * mScale;
     }
 
