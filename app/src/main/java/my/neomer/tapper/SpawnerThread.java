@@ -55,8 +55,11 @@ public class SpawnerThread extends Thread
                 }
                 else
                 {
-                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.stone_bullet));
-                    sprite.setScale(0.1);
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.stone_bullet), 10);
+                    sprite.setAnimationSpeed(3);
+                    sprite.setScale(0.2);
+                    sprite.setAnimationType(Sprite.SpriteAnimationType.Circle);
+                    sprite.Start();
                     actor = new StoneProjectile(coordinates, sprite, defaultMaterial);
                     actor.ApplyForce(mGameSurface.getGravity());
                 }
@@ -64,6 +67,7 @@ public class SpawnerThread extends Thread
                 Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.energy), 8);
                 sprite.Start();
                 sprite.setScale(0.3);
+                sprite.setAnimationType(Sprite.SpriteAnimationType.Circle);
                 sprite.setAnimationSpeed(2);
                 actor = new Energy(coordinates, sprite, defaultMaterial);
             }

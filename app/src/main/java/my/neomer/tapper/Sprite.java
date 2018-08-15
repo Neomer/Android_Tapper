@@ -16,7 +16,7 @@ public class Sprite
     private double mScale;
     private int mDirection;
     private boolean mAnimation;
-
+    private SpriteAnimationType mSpriteAnimationType;
 
     public Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
         mBitmap = bitmap;
@@ -27,6 +27,7 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
     public Sprite(Bitmap bitmap, int statesCount) {
@@ -38,6 +39,7 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
     public Sprite(Bitmap bitmap) {
@@ -49,6 +51,7 @@ public class Sprite
         mScale = 1;
         mDirection = 1;
         mAnimation = false;
+        mSpriteAnimationType = SpriteAnimationType.Reverse;
     }
 
     public void Start() {
@@ -59,17 +62,41 @@ public class Sprite
         mAnimation = false;
     }
 
+    public enum SpriteAnimationType
+    {
+        // При достижении конца меняется направление движения кадров
+        Reverse,
+        // При достижении конца движение начинается с 1го кадра
+        Circle
+    }
+
+    public void setAnimationType(SpriteAnimationType animationType) {
+        mSpriteAnimationType = animationType;
+    }
+
+
     public void Update(double timeSpan) {
         if (mAnimation) {
             mCurrentState += (timeSpan * mAnimationSpeed * mDirection);
-            if (mStatesCount - mCurrentState <= 0) {
-                mCurrentState = mStatesCount - 1;
-                mDirection = -1;
-            }
+            switch (mSpriteAnimationType)
+            {
+                case Circle:
+                    if (mStatesCount - mCurrentState <= 0) {
+                        mCurrentState = timeSpan * mAnimationSpeed;
+                    }
+                    break;
 
-            if (mCurrentState <= 0) {
-                mCurrentState = timeSpan * mAnimationSpeed;
-                mDirection = 1;
+                case Reverse:
+                    if (mStatesCount - mCurrentState <= 0) {
+                        mCurrentState = mStatesCount - 1;
+                        mDirection = -1;
+                    }
+
+                    if (mCurrentState <= 0) {
+                        mCurrentState = timeSpan * mAnimationSpeed;
+                        mDirection = 1;
+                    }
+                    break;
             }
         }
     }

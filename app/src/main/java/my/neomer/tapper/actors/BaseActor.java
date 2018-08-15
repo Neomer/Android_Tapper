@@ -42,7 +42,7 @@ abstract class BaseActor implements IActor {
 
     @Override
     public boolean IsVisible(Canvas canvas) {
-        return GetCoordinates().getY() >= 0 &&
+        return GetCoordinates().getY() + getSprite().GetHeight() >= 0 &&
                 GetCoordinates().getY() - getSprite().GetHeight() < canvas.getHeight() &&
                 GetCoordinates().getX() + getSprite().GetWidth() >= 0 &&
                 GetCoordinates().getX() < canvas.getWidth();
