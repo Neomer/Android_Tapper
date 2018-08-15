@@ -18,11 +18,6 @@ public class MapActor extends BaseActor {
     }
 
     @Override
-    public ICollisionRegion GetCollisionRegion() {
-        return null;
-    }
-
-    @Override
     public boolean IsDead() {
         return false;
     }

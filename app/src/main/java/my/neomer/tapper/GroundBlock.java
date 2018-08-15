@@ -9,7 +9,8 @@ public class GroundBlock extends BaseActor {
     GroundBlock(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
-        mCollisionRegion = new RectangleCollisionRegion(this, sprite.GetWidth(), sprite.GetHeight());
+        GetCollisionRegion().AddCollisionElement(
+                new RectangleCollisionElement(this, sprite.GetWidth(), sprite.GetHeight()));
 
         ApplyImpulse(new Vector(-5, 0));
     }
@@ -28,10 +29,5 @@ public class GroundBlock extends BaseActor {
     public void Draw(Canvas canvas) {
         GetCoordinates().setY(canvas.getHeight() - getSprite().GetHeight());
         super.Draw(canvas);
-    }
-
-    @Override
-    public ICollisionRegion GetCollisionRegion() {
-        return mCollisionRegion;
     }
 }

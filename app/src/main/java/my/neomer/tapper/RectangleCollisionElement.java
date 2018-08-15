@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class RectangleCollisionRegion implements ICollisionRegion {
+public class RectangleCollisionElement implements ICollisionElement {
 
     private double mWidth, mHeight, mLeft, mTop;
     private IPhysicsObject mPhysicsObject;
     private Paint mRegionPaint;
 
-    RectangleCollisionRegion(IPhysicsObject owner, double width, double height) {
+    RectangleCollisionElement(IPhysicsObject owner, double width, double height) {
         mLeft = 0;
         mTop = 0;
         mWidth = width;
@@ -23,7 +23,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
 
     }
 
-    RectangleCollisionRegion(IPhysicsObject owner, double left, double top, double width, double height) {
+    RectangleCollisionElement(IPhysicsObject owner, double left, double top, double width, double height) {
         mLeft = left;
         mTop = top;
         mWidth = width;
@@ -56,15 +56,15 @@ public class RectangleCollisionRegion implements ICollisionRegion {
     }
 
     @Override
-    public boolean checkIntersect(ICollisionRegion collisionRegion) {
+    public boolean checkIntersect(ICollisionElement collisionRegion) {
         if (collisionRegion == null)
         {
             return false;
         }
 
-        if (collisionRegion instanceof RectangleCollisionRegion)
+        if (collisionRegion instanceof RectangleCollisionElement)
         {
-            RectangleCollisionRegion rectRegion = (RectangleCollisionRegion) collisionRegion;
+            RectangleCollisionElement rectRegion = (RectangleCollisionElement) collisionRegion;
             Coordinate coords1 = mPhysicsObject.GetCoordinates().Clone(),
                         coords2 = collisionRegion.getPhysicsObject().GetCoordinates().Clone();
 
@@ -84,7 +84,7 @@ public class RectangleCollisionRegion implements ICollisionRegion {
         return false;
     }
 
-    private Rect getMappedRect(RectangleCollisionRegion collisionRegion, Coordinate point) {
+    private Rect getMappedRect(RectangleCollisionElement collisionRegion, Coordinate point) {
         return new Rect(
                 (int)(point.getX() + mLeft),
                 (int)(point.getY() + mTop),
