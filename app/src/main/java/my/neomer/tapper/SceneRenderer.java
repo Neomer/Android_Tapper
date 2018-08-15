@@ -1,8 +1,11 @@
 package my.neomer.tapper;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
@@ -21,6 +24,7 @@ public class SceneRenderer extends Thread
     private volatile boolean mRun = false;
 
     private Paint mTextPaint;
+    private Bitmap backBitmap;
 
 
     SceneRenderer(GameSurface gameSurface) {
@@ -28,6 +32,7 @@ public class SceneRenderer extends Thread
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(25);
         mTextPaint.setARGB(255, 255,0,0);
+        backBitmap = BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.back);
     }
 
     public void begin()
@@ -120,6 +125,12 @@ public class SceneRenderer extends Thread
                     updateActorStates(canvas, elapsedPhys);
 
                     // Draw scene
+                    /*
+                    Rect srcRect = new Rect(0, 0, backBitmap.getWidth(), backBitmap.getHeight()),
+                        dstRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                    canvas.drawBitmap(backBitmap,srcRect ,dstRect, null);
+                    */
                     canvas.drawColor(ResourcesCompat.getColor(mGameSurface.getResources(), R.color.BackgroundSky, null));
 
                     Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
@@ -146,7 +157,6 @@ public class SceneRenderer extends Thread
                         }
                     }
 
-                    //Log.d("app", "draw scene - end");
                     // Draw HUD
                     mGameSurface.getHUD().Draw(canvas);
 
