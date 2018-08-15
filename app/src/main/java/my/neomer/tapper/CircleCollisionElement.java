@@ -64,8 +64,8 @@ public class CircleCollisionElement implements ICollisionElement {
     @Override
     public void Draw(Canvas canvas) {
         canvas.drawCircle(
-                (float) (double) mCenter.getX(),
-                (float) (double) mCenter.getY(),
+                (float) (double) (mCenter.getX() + getPhysicsObject().GetCoordinates().getX()),
+                (float) (double) (mCenter.getY() + getPhysicsObject().GetCoordinates().getY()),
                 (float) mRaduis,
                 mDefaultPaint);
     }
