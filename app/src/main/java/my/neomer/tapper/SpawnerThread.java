@@ -47,8 +47,8 @@ public class SpawnerThread extends Thread
             Coordinate coordinates = new Coordinate(1700, Math.abs(Math.random()) * 800 + 100);
 
             double random = Math.random();
-            if (random > 0.5) {
-                if (random >= 0.75)
+            if (random > 0.33) {
+                if (random >= 0.66)
                 {
                     Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
                     actor = new Barrier(coordinates, sprite, defaultMaterial);
