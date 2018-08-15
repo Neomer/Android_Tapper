@@ -67,6 +67,11 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
+    public double GetMass() {
+        return 1;
+    }
+
+    @Override
     public Coordinate GetCoordinates() {
         return mPosition;
     }
@@ -109,9 +114,8 @@ abstract class BaseActor implements IActor {
     }
 
     @Override
-    public void ApplyImpulse(Vector impulse)
-    {
-        mVelocity.Add(impulse);
+    public void ApplyImpulse(Vector impulse) {
+        mVelocity.Add(impulse.Multiply(1 / GetMass()));
     }
 
     @Override

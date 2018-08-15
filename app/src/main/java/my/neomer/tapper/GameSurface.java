@@ -45,7 +45,11 @@ public class GameSurface extends SurfaceView
             BeginPlay();
         }
 
-        ((PlayerActor) getPlayer()).Jump();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                getPlayer().Jump();
+            break;
+        }
 
         return true;
     }
