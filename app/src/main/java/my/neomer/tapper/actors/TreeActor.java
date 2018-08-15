@@ -26,7 +26,7 @@ public class TreeActor extends BaseActor {
 
     @Override
     public void Draw(Canvas canvas) {
-        GetCoordinates().setY(canvas.getHeight() - getSprite().GetHeight() - 20);
+        GetCoordinates().setY(canvas.getHeight() - getSprite().GetHeight() - 80);
         super.Draw(canvas);
     }
 
