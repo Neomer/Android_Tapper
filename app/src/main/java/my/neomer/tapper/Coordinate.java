@@ -15,6 +15,11 @@ public class Coordinate extends Point<Double>
         y += vector.getY();
     }
 
+    public void Add(Coordinate coordinate) {
+        x += coordinate.getX();
+        y += coordinate.getY();
+    }
+
     public String toString() {
         return String.format("(%f;%f)", x, y);
     }

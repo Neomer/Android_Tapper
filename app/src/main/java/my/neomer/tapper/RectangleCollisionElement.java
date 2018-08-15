@@ -68,27 +68,17 @@ public class RectangleCollisionElement implements ICollisionElement {
 
         if (collisionRegion instanceof RectangleCollisionElement)
         {
-            RectangleCollisionElement rectRegion = (RectangleCollisionElement) collisionRegion;
-            Coordinate coords1 = mPhysicsObject.GetCoordinates().Clone(),
-                        coords2 = collisionRegion.getPhysicsObject().GetCoordinates().Clone();
-
-            Rect rect1 = getMappedRect(this, coords1),
-                    rect2 = getMappedRect(rectRegion, coords2);
-
-            return rect1.intersect(rect2);
-
-            /* manual algorithm
-            return rect1.left <= rect2.right &&
-                    rect1.right >= rect2.left &&
-                    rect1.bottom <= rect2.top &&
-                    rect1.top >= rect2.bottom;
-            */
+            return CollisionSolver.CheckRectToRectIntersection(this, (RectangleCollisionElement) collisionRegion);
+        }
+        else if (collisionRegion instanceof CircleCollisionElement)
+        {
+            return CollisionSolver.CheckRectToCircleIntersection(this, (CircleCollisionElement) collisionRegion);
         }
 
         return false;
     }
 
-    private Rect getMappedRect(RectangleCollisionElement collisionRegion, Coordinate point) {
+    public static Rect getMappedRect(RectangleCollisionElement collisionRegion, Coordinate point) {
         return new Rect(
                 (int)(point.getX() + collisionRegion.getLeft()),
                 (int)(point.getY() + collisionRegion.getTop()),
