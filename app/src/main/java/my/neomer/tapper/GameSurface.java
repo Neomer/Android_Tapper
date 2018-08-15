@@ -63,6 +63,8 @@ public class GameSurface extends SurfaceView
         mSpawnActors = new ArrayList<IActor>();
         mActorsLocker = new ReentrantLock();
 
+        mDisplayFPS = true;
+
         // Load global forces
         mGravity = new GravityForce();
 
@@ -71,10 +73,7 @@ public class GameSurface extends SurfaceView
         defaultMaterial.setElasticity(0);
 
         // Creating map
-        Sprite mapStrite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.map));
-        mMapActor = new MapActor(new Coordinate(0, 0), mapStrite, defaultMaterial);
-        mMapActor.ApplyImpulse(new Vector(-5, 0));
-        SpawnActor(mMapActor);
+        MapLoader.LoadMapFromFile(this, null);
 
         //Creating HUD
         mHUD = new HUD(this);

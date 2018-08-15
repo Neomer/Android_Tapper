@@ -12,7 +12,7 @@ public class GroundBlock extends BaseActor {
         GetCollisionRegion().AddCollisionElement(
                 new RectangleCollisionElement(this, sprite.GetWidth(), sprite.GetHeight()));
 
-        ApplyImpulse(new Vector(-5, 0));
+        ApplyImpulse(new Vector(-10, 0));
     }
 
     @Override
