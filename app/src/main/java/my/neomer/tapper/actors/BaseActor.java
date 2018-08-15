@@ -1,4 +1,4 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +15,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import my.neomer.tapper.BaseCollisionRegion;
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.ICollisionRegion;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.Sprite;
+import my.neomer.tapper.Vector;
 
 abstract class BaseActor implements IActor {
     private Coordinate mPosition;
@@ -41,7 +48,7 @@ abstract class BaseActor implements IActor {
                 GetCoordinates().getX() < canvas.getWidth();
     }
 
-    BaseActor(Coordinate position, Sprite sprite, Material material)
+    public BaseActor(Coordinate position, Sprite sprite, Material material)
     {
         mSprite = sprite;
         mPosition = position;

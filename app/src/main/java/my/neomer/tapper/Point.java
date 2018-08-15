@@ -8,9 +8,9 @@ public class Point<T> {
         this.y = y;
     }
 
-    T getX() { return x; }
-    T getY() { return y; }
+    public T getX() { return x; }
+    public T getY() { return y; }
 
-    void setX(T value) { x = value; }
-    void setY(T value) { y = value; }
+    public void setX(T value) { x = value; }
+    public void setY(T value) { y = value; }
 }

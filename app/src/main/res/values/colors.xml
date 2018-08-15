@@ -9,4 +9,6 @@
 
     <color name="HUDenergy">#00ff00</color>
     <color name="HUDfontTime">#FFCC33</color>
+
+    <color name="BackgroundSky">#93D2FF</color>
 </resources>

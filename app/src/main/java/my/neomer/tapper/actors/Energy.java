@@ -1,8 +1,13 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
+
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.RectangleCollisionElement;
+import my.neomer.tapper.Sprite;
 
 public class Energy extends BaseActor {
 
-    Energy(Coordinate position, Sprite sprite, Material material) {
+    public Energy(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
         GetCollisionRegion().AddCollisionElement(

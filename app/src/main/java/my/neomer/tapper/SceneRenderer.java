@@ -3,10 +3,16 @@ package my.neomer.tapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import java.util.Iterator;
 import java.util.Locale;
+
+import my.neomer.tapper.actors.Energy;
+import my.neomer.tapper.actors.IActor;
+import my.neomer.tapper.actors.MapActor;
+import my.neomer.tapper.actors.PlayerActor;
 
 public class SceneRenderer extends Thread
 {
@@ -115,8 +121,9 @@ public class SceneRenderer extends Thread
                     // Update physics
                     updateActorStates(canvas, elapsedPhys);
 
-                    //Log.d("app", "draw scene - start");
                     // Draw scene
+                    canvas.drawColor(ResourcesCompat.getColor(mGameSurface.getResources(), R.color.BackgroundSky, null));
+
                     Iterator<IActor> actorsIterator = mGameSurface.getActors().iterator();
 
                     while (actorsIterator.hasNext())
@@ -127,11 +134,13 @@ public class SceneRenderer extends Thread
                         {
                             actor.Draw(canvas);
                             // Draw collision regions
+                            /*
                             ICollisionRegion collisionRegion = actor.GetCollisionRegion();
                             if (collisionRegion != null)
                             {
                                 collisionRegion.Draw(canvas);
                             }
+                            */
                         }
                         else
                         {

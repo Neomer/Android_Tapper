@@ -18,7 +18,7 @@ public class Sprite
     private boolean mAnimation;
 
 
-    Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
+    public Sprite(Bitmap bitmap, Point<Integer> mask, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
         mMask = mask;
@@ -29,7 +29,7 @@ public class Sprite
         mAnimation = false;
     }
 
-    Sprite(Bitmap bitmap, int statesCount) {
+    public Sprite(Bitmap bitmap, int statesCount) {
         mBitmap = bitmap;
         mStatesCount = statesCount;
         mMask = new Point<Integer>(bitmap.getWidth() / statesCount, bitmap.getHeight());
@@ -51,15 +51,15 @@ public class Sprite
         mAnimation = false;
     }
 
-    void Start() {
+    public void Start() {
         mAnimation = true;
     }
 
-    void Stop() {
+    public void Stop() {
         mAnimation = false;
     }
 
-    void Update(double timeSpan) {
+    public void Update(double timeSpan) {
         if (mAnimation) {
             mCurrentState += (timeSpan * mAnimationSpeed * mDirection);
             if (mStatesCount - mCurrentState <= 0) {
@@ -74,20 +74,20 @@ public class Sprite
         }
     }
 
-    Rect GetCurrentMask() {
+    public Rect GetCurrentMask() {
         int dx = (int)mCurrentState;
         return new Rect((int)(dx * mMask.getX()), 0, (dx + 1) * mMask.getX(), mMask.getY());
     }
 
-    Bitmap GetBitmap() {
+    public Bitmap GetBitmap() {
         return mBitmap;
     }
 
-    double GetWidth() {
+    public double GetWidth() {
         return mMask.getX() * mScale;
     }
 
-    double GetHeight() {
+    public double GetHeight() {
         return mMask.getY() * mScale;
     }
 

@@ -1,6 +1,13 @@
-package my.neomer.tapper;
+package my.neomer.tapper.actors;
 
-class PlayerActor extends BaseActor implements IControllable
+import my.neomer.tapper.Coordinate;
+import my.neomer.tapper.IControllable;
+import my.neomer.tapper.Material;
+import my.neomer.tapper.RectangleCollisionElement;
+import my.neomer.tapper.Sprite;
+import my.neomer.tapper.Vector;
+
+public class PlayerActor extends BaseActor implements IControllable
 {
     public static final double MAX_ENERGY  = 100; // Energy limit
     private static final int ENERGY_BOOST = 25;   // Energy value increase
@@ -8,7 +15,7 @@ class PlayerActor extends BaseActor implements IControllable
     private double mEnergy;
 
 
-    PlayerActor(Coordinate position, Sprite sprite, Material material) {
+    public PlayerActor(Coordinate position, Sprite sprite, Material material) {
         super(position, sprite, material);
 
         GetCollisionRegion().AddCollisionElement(
