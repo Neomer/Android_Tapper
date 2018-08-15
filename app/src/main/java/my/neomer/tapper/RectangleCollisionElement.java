@@ -55,6 +55,10 @@ public class RectangleCollisionElement implements ICollisionElement {
         this.mHeight = height;
     }
 
+    public double getLeft() { return mLeft; }
+
+    public  double getTop() { return  mTop; }
+
     @Override
     public boolean checkIntersect(ICollisionElement collisionRegion) {
         if (collisionRegion == null)
@@ -86,10 +90,10 @@ public class RectangleCollisionElement implements ICollisionElement {
 
     private Rect getMappedRect(RectangleCollisionElement collisionRegion, Coordinate point) {
         return new Rect(
-                (int)(point.getX() + mLeft),
-                (int)(point.getY() + mTop),
-                (int)(point.getX() + mLeft + collisionRegion.getWidth()),
-                (int)(point.getY() + mTop + collisionRegion.getHeight()));
+                (int)(point.getX() + collisionRegion.getLeft()),
+                (int)(point.getY() + collisionRegion.getTop()),
+                (int)(point.getX() + collisionRegion.getLeft() + collisionRegion.getWidth()),
+                (int)(point.getY() + collisionRegion.getTop() + collisionRegion.getHeight()));
     }
 
     @Override
