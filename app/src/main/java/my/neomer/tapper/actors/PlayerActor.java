@@ -41,10 +41,15 @@ public class PlayerActor extends BaseActor implements IControllable
     }
 
     @Override
+    public double GetMass() {
+        return 2;
+    }
+
+    @Override
     public void Jump() {
         if (mEnergy > 0)
         {
-            ApplyImpulse(new Vector(0, -10));
+            ApplyImpulse(new Vector(0, -50));
         }
     }
 

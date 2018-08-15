@@ -7,13 +7,17 @@ public interface IPhysicsObject {
     Coordinate GetCoordinates();
 
     void ApplyForce(Vector force);
+
     void ApplyImpulse(Vector impulse);
+
+    double GetMass();
 
     void Update(double timeSpan);
 
     boolean IsStatic();
 
     void Kill();
+
     boolean IsDead();
 
     ICollisionRegion GetCollisionRegion();
