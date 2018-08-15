@@ -7,8 +7,11 @@ public interface IActor extends IPhysicsObject {
     void Draw(Canvas canvas);
 
     Sprite getSprite();
+
     Vector getVelocity();
 
     boolean CanKill();
+
+    boolean IsVisible(Canvas canvas);
 
 }

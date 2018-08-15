@@ -151,7 +151,6 @@ public class GameSurface extends SurfaceView
     }
 
     public  void Unlock() {
-        Log.d("app", "Unlock() - start");
 
         synchronized (mSpawnActors)
         {
@@ -161,7 +160,6 @@ public class GameSurface extends SurfaceView
             mSpawnActors.clear();
         }
 
-        Log.d("app", "Unlock() - end");
     }
 
     /**
