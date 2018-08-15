@@ -3,6 +3,7 @@ package my.neomer.tapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -72,7 +73,24 @@ public class HUD {
         canvas.drawBitmap(mBitmapEnergy, 20, 40, null);
 
         int startPosition = mBitmapEnergy.getWidth() + 40;
-        int length = (int) (player.getEnergy() / PlayerActor.MAX_ENERGY * ENERGY_LENGTH) + startPosition;
+        double energyPercent = player.getEnergy() / PlayerActor.MAX_ENERGY;
+        int length = (int) (energyPercent * ENERGY_LENGTH) + startPosition;
+
+        int r, g;
+
+        energyPercent += 0.0000001;
+        if (energyPercent <= 0.5)
+        {
+            g = (int) (energyPercent * 510);
+            r = 255;
+        }
+        else
+        {
+            r = (int) (0.5 / energyPercent * 255);
+            g = 255;
+        }
+
+        mRectPaint.setColor(Color.rgb(r, g, 0));
         
         canvas.drawRect(startPosition, 40, length >= startPosition ? length : startPosition, mBitmapEnergy.getHeight() + 40, mRectPaint);
 
