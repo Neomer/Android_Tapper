@@ -6,6 +6,7 @@ import my.neomer.tapper.actors.Barrier;
 import my.neomer.tapper.actors.Energy;
 import my.neomer.tapper.actors.IActor;
 import my.neomer.tapper.actors.StoneProjectile;
+import my.neomer.tapper.actors.TreeActor;
 
 public class SpawnerThread extends Thread
 {
@@ -48,12 +49,12 @@ public class SpawnerThread extends Thread
 
             double random = Math.random();
             if (random > 0.33) {
-                if (random >= 0.66)
+                if (random < 0.55)
                 {
                     Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
                     actor = new Barrier(coordinates, sprite, defaultMaterial);
                 }
-                else
+                else if (random < 0.68)
                 {
                     Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.stone_bullet), 10);
                     sprite.setAnimationSpeed(3);
@@ -62,6 +63,12 @@ public class SpawnerThread extends Thread
                     sprite.Start();
                     actor = new StoneProjectile(coordinates, sprite, defaultMaterial);
                     actor.ApplyForce(mGameSurface.getGravity());
+                }
+                else
+                {
+                    Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.tree));
+                    sprite.setScale(0.5);
+                    actor = new TreeActor(coordinates, sprite, defaultMaterial);
                 }
             } else {
                 Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.energy), 8);
