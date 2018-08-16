@@ -23,6 +23,14 @@ public class GameActivity extends BaseGameActivity {
         });
 
         setContentView(gameSurface);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        gameSurface.BeginPlay();
     }
 
     private void ShowResults(GameResults results) {

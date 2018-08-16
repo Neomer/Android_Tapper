@@ -78,8 +78,6 @@ public class SceneRenderer extends Thread
                         actor.GetCollisionRegion().hasElements() &&
                         actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
                 {
-                    actor.GetCollisionRegion().Draw(canvas);
-
                     if (actor.CanKill())
                     {
                         player.Kill();
@@ -126,8 +124,11 @@ public class SceneRenderer extends Thread
                 canvas = mGameSurface.getHolder().lockCanvas();
                 synchronized (mGameSurface.getHolder())
                 {
-                    // Update physics
-                    updateActorStates(canvas, elapsedPhys);
+
+                    if (canvas == null)
+                    {
+                        continue;
+                    }
 
                     // Draw scene
                     /*
@@ -181,6 +182,10 @@ public class SceneRenderer extends Thread
                 {
                     mGameSurface.StopPlay();
                 }
+
+                // Update physics
+                updateActorStates(canvas, elapsedPhys);
+
                 mGameSurface.Unlock();
             }
             catch (Exception e) {

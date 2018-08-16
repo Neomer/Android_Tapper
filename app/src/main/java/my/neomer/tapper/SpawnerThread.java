@@ -49,7 +49,7 @@ public class SpawnerThread extends Thread
 
             double random = Math.random();
             if (random > 0.33) {
-                if (random < 0.55)
+                if (random < 0.2)
                 {
                     Sprite sprite = new Sprite(BitmapFactory.decodeResource(mGameSurface.getResources(), R.drawable.block));
                     actor = new Barrier(coordinates, sprite, defaultMaterial);

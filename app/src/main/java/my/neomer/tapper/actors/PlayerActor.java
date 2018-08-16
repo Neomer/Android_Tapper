@@ -19,7 +19,7 @@ public class PlayerActor extends BaseActor implements IControllable
         super(position, sprite, material);
 
         GetCollisionRegion().AddCollisionElement(
-                new RectangleCollisionElement(this, 0, 20, sprite.GetWidth(), sprite.GetHeight() - 40));
+                new RectangleCollisionElement(this, 0, 20, sprite.GetWidth() - 20, sprite.GetHeight() - 40));
         mEnergy = PlayerActor.MAX_ENERGY;
     }
 
