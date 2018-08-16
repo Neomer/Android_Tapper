@@ -40,6 +40,11 @@ public class GameSurface extends SurfaceView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        if (!bRun) {
+            bRun = true;
+            BeginPlay();
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 getPlayer().Jump();
