@@ -1,11 +1,22 @@
-package my.neomer.tapper;
+package my.neomer.tapper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import my.neomer.tapper.BaseGameActivity;
+import my.neomer.tapper.GameResults;
+import my.neomer.tapper.GameSurface;
+import my.neomer.tapper.MusicService;
+import my.neomer.tapper.OnGameOverListener;
+
 public class GameActivity extends BaseGameActivity {
 
     private GameSurface gameSurface;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,7 @@ public class GameActivity extends BaseGameActivity {
 
         setContentView(gameSurface);
 
+        startService(new Intent(this, MusicService.class));
     }
 
     @Override

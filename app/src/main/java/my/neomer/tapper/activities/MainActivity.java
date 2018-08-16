@@ -1,17 +1,15 @@
-package my.neomer.tapper;
+package my.neomer.tapper.activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import my.neomer.tapper.BaseGameActivity;
+import my.neomer.tapper.MusicService;
+import my.neomer.tapper.R;
 
 public class MainActivity extends BaseGameActivity {
 
@@ -20,8 +18,6 @@ public class MainActivity extends BaseGameActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        stopService(new Intent(this, MusicService.class));
     }
 
     @Override

@@ -1,16 +1,17 @@
-package my.neomer.tapper;
+package my.neomer.tapper.activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import my.neomer.tapper.BaseGameActivity;
+import my.neomer.tapper.GameResults;
+import my.neomer.tapper.R;
+import my.neomer.tapper.TimeHelper;
 
 public class ResultsActivity extends BaseGameActivity {
 
