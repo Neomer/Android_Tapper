@@ -56,6 +56,7 @@ public class MainActivity extends BaseGameActivity {
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void loadActions() {

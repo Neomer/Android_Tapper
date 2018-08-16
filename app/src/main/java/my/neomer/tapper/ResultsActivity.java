@@ -78,6 +78,7 @@ public class ResultsActivity extends BaseGameActivity {
     private void toMainMenu() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

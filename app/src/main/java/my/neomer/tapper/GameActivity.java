@@ -30,6 +30,7 @@ public class GameActivity extends BaseGameActivity {
         intent.putExtra("game_results", results);
 
         startActivity(intent);
+        finish();
     }
 
 
