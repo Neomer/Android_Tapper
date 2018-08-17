@@ -76,7 +76,7 @@ public class SceneRenderer extends Thread
                 if (actor != player &&
                         actor.GetCollisionRegion() != null &&
                         actor.GetCollisionRegion().hasElements() &&
-                        actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()))
+                        actor.GetCollisionRegion().checkIntersect(player.GetCollisionRegion()) && false)
                 {
                     if (actor.CanKill())
                     {
