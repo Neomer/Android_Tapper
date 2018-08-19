@@ -18,6 +18,7 @@ public class MainActivity extends BaseGameActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //stopService(new Intent((this, MusicService.class)));
     }
 
     @Override
@@ -46,7 +47,7 @@ public class MainActivity extends BaseGameActivity {
 
         getWindow().getDecorView().setBackgroundColor(Color.parseColor("#000000"));
 
-        startService(new Intent(this, MusicService.class));
+        //startService(new Intent(this, MusicService.class));
     }
 
     private void startGame() {

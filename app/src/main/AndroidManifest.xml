@@ -13,22 +13,26 @@
             android:name=".activities.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".activities.GameActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.GameActivity"
+        <activity android:name=".activities.ResultsActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape">
+        </activity>
 
         <service
             android:name=".MusicService"
             android:enabled="true" />
 
-        <activity android:name=".activities.ResultsActivity"></activity>
     </application>
 
 </manifest>
