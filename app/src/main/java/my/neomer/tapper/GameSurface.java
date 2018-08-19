@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -160,15 +161,20 @@ public class GameSurface extends SurfaceView
         return System.currentTimeMillis() - mStartTime;
     }
 
-    public  void Unlock() {
+    public synchronized void Unlock() {
 
-        synchronized (mSpawnActors)
-        {
-            for (IActor spawnActor : mSpawnActors) {
-                mActors.add(spawnActor);
+        Iterator<IActor> actorIterator = mActors.iterator();
+        while (actorIterator.hasNext()) {
+            IActor actor = actorIterator.next();
+            if (actor.IsDead()) {
+                actorIterator.remove();
             }
-            mSpawnActors.clear();
         }
+
+        for (IActor spawnActor : mSpawnActors) {
+            mActors.add(spawnActor);
+        }
+        mSpawnActors.clear();
 
     }
 
