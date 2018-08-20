@@ -17,15 +17,23 @@ public class ButtonViewItem extends AbstractViewItem {
 
         mPaint = new Paint();
         mPaint.setColor(Color.RED);
+
+        if (parent != null) {
+            parent.AddChildViewItem(this);
+        }
     }
 
-    public ButtonViewItem(String text, int width, int height, int left, int top, IViewItem parent) {
+    public ButtonViewItem(String text, int left, int top, int width, int height, IViewItem parent) {
         super(width, height, left, top, parent);
 
         mText = text;
 
         mPaint = new Paint();
         mPaint.setColor(Color.RED);
+
+        if (parent != null) {
+            parent.AddChildViewItem(this);
+        }
     }
 
     @Override
@@ -33,6 +41,8 @@ public class ButtonViewItem extends AbstractViewItem {
         int left = getAbsoluteLeft();
         int top = getAbsoluteTop();
         canvas.drawRect(left, top, left + getWidth(), top + getHeight(), mPaint);
+
+        super.Render(canvas);
     }
 
     public void setBackgroundColor(int color) {

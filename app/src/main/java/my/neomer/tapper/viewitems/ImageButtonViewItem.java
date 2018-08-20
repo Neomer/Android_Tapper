@@ -5,13 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class ImageButtomViewItem extends AbstractViewItem {
+public class ImageButtonViewItem extends AbstractViewItem {
 
     Paint mPaint;
     String mText;
     Bitmap mBitmap;
 
-    public ImageButtomViewItem(Bitmap bitmap, String text, IViewItem parent) {
+    public ImageButtonViewItem(Bitmap bitmap, String text, IViewItem parent) {
         super(parent);
         mText = text;
 
@@ -21,7 +21,7 @@ public class ImageButtomViewItem extends AbstractViewItem {
         mPaint.setColor(Color.RED);
     }
 
-    public ImageButtomViewItem(Bitmap bitmap, String text, int width, int height, int left, int top, IViewItem parent) {
+    public ImageButtonViewItem(Bitmap bitmap, String text, int left, int top, int width, int height, IViewItem parent) {
         super(width, height, left, top, parent);
         mText = text;
 
@@ -36,5 +36,7 @@ public class ImageButtomViewItem extends AbstractViewItem {
         if (mBitmap != null) {
 
         }
+
+        super.Render(canvas);
     }
 }

@@ -3,6 +3,7 @@ package my.neomer.tapper;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -15,6 +16,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import my.neomer.tapper.actors.IActor;
 import my.neomer.tapper.actors.MapActor;
 import my.neomer.tapper.actors.PlayerActor;
+import my.neomer.tapper.viewitems.ButtonViewItem;
+import my.neomer.tapper.viewitems.IViewItem;
+import my.neomer.tapper.viewitems.ImageViewItem;
+import my.neomer.tapper.viewitems.OnViewItemEventListener;
 
 public class GameSurface extends SurfaceView
 {
@@ -38,13 +43,18 @@ public class GameSurface extends SurfaceView
 
     private OnGameOverListener mOnGameOverLisener = null;
 
+    private IViewItem rootViewItem;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        IViewItem viewItem = rootViewItem.findChildByPoint((int)event.getX(), (int)event.getY());
 
         if (!bRun) {
             bRun = true;
             BeginPlay();
         }
+
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -101,6 +111,16 @@ public class GameSurface extends SurfaceView
         // Creating world updater
         sceneRenderer = new SceneRenderer(this);
         spawnerThread = new SpawnerThread(this);
+
+        rootViewItem = new ImageViewItem(0, 0, 200, 200, null);
+
+        IViewItem button = new ButtonViewItem("Button 1", 0, 0, 200, 200, rootViewItem);
+        button.setViewItemEventListener(new OnViewItemEventListener() {
+            @Override
+            public void OnClick(IViewItem sender) {
+                Log.d("app", "Button clicked!");
+            }
+        });
     }
 
     public PlayerActor getPlayer() {

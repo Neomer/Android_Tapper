@@ -8,6 +8,9 @@ import my.neomer.tapper.GameResults;
 import my.neomer.tapper.GameSurface;
 import my.neomer.tapper.MusicService;
 import my.neomer.tapper.OnGameOverListener;
+import my.neomer.tapper.viewitems.ButtonViewItem;
+import my.neomer.tapper.viewitems.IViewItem;
+import my.neomer.tapper.viewitems.OnViewItemEventListener;
 
 public class GameActivity extends BaseGameActivity {
 

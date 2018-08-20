@@ -2,12 +2,19 @@ package my.neomer.tapper.viewitems;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractViewItem implements IViewItem {
 
     IViewItem mParent;
     int mWidth, mHeight, mTop, mLeft;
     Rect mPadding, mMargin;
+    List<IViewItem> mChildrenViewItem;
+
+    OnViewItemEventListener mViewItemEventListener;
 
     public AbstractViewItem(IViewItem parent) {
         mParent = parent;
@@ -15,8 +22,45 @@ public abstract class AbstractViewItem implements IViewItem {
         mHeight = 0;
         mTop = 0;
         mLeft = 0;
+
         mPadding = new Rect(0, 0, 0, 0);
         mMargin = new Rect(0,0,0,0);
+
+        mChildrenViewItem = new ArrayList<IViewItem>();
+
+        mViewItemEventListener = null;
+    }
+
+    @Override
+    @Nullable
+    public IViewItem findChildByPoint(int x, int y) {
+        IViewItem result = null;
+
+        for (IViewItem viewItem : mChildrenViewItem) {
+            result  = viewItem.findChildByPoint(x, y);
+            if (result != null) {
+                return result;
+            }
+        }
+
+        int left = getAbsoluteLeft(),
+                top = getAbsoluteTop();
+
+        if (x >= left && x <= left + getWidth() &&
+                y >= top && y <= top + getHeight())
+        {
+            if (mViewItemEventListener != null) {
+                mViewItemEventListener.OnClick(this);
+            }
+            return this;
+        }
+
+        return result;
+    }
+
+    @Override
+    public void setViewItemEventListener(OnViewItemEventListener viewItemEventListener) {
+        mViewItemEventListener = viewItemEventListener;
     }
 
     public AbstractViewItem(int width, int height, int left, int top, IViewItem parent) {
@@ -25,8 +69,13 @@ public abstract class AbstractViewItem implements IViewItem {
         mHeight = height;
         mTop = top;
         mLeft = left;
+
         mPadding = new Rect(0, 0, 0, 0);
         mMargin = new Rect(0,0,0,0);
+
+        mChildrenViewItem = new ArrayList<IViewItem>();
+
+        mViewItemEventListener = null;
     }
 
     public void setPosition(int left, int top) {
@@ -90,6 +139,13 @@ public abstract class AbstractViewItem implements IViewItem {
         return mParent;
     }
 
+    @Override
+    public void Render(Canvas canvas) {
+        for (IViewItem viewItem : mChildrenViewItem) {
+            viewItem.Render(canvas);
+        }
+    }
+
     public int getAbsoluteLeft() {
         IViewItem parent = getParentViewItem();
         int result = getLeft();
@@ -110,4 +166,7 @@ public abstract class AbstractViewItem implements IViewItem {
         return result;
     }
 
+    public void AddChildViewItem(IViewItem viewItem) {
+        mChildrenViewItem.add(viewItem);
+    }
 }
